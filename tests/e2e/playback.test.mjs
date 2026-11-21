@@ -257,9 +257,12 @@ describe('playback', () => {
   it('plays every example without errors', async () => {
     const page = await env.open();
     for (const name of ['First Steps', 'Campfire Strum', 'Power Chord Riff']) {
+      // The app starts with First Steps, so wait for the new copy (a new id), not just the title.
+      // Otherwise Space can start the old copy, and the example arriving a moment later stops it.
+      const before = await page.evaluate(() => window.tablab.editor.song.id);
       await page.click('#btn-library');
       await page.locator('#lib-examples li', { hasText: name }).locator('button').click();
-      await page.waitForFunction((t) => window.tablab.editor.song.title === t, name);
+      await page.waitForFunction(([t, id]) => window.tablab.editor.song.title === t && window.tablab.editor.song.id !== id, [name, before]);
       await page.focus('#score');
       await page.keyboard.press('Space');
       await page.waitForTimeout(1200);
