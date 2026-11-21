@@ -9,7 +9,9 @@ export async function setup() {
   const { chromium } = require('playwright');
   const server = await startServer(0);
   const port = server.address().port;
-  const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
+  const options = { args: (process.env.CHROMIUM_ARGS || '').split(' ').filter(Boolean) };
+  if (process.env.CHROMIUM_PATH) options.executablePath = process.env.CHROMIUM_PATH;
+  const browser = await chromium.launch(options);
   const base = `http://127.0.0.1:${port}/`;
   return {
     base,

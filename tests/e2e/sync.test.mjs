@@ -103,7 +103,15 @@ describe('backing track sync accuracy', () => {
       const page = await prepare(speed);
       const start = await page.evaluate(() => window.tablab.engine.ctx.currentTime);
       await page.keyboard.press('Space');
-      await page.waitForTimeout(5500);
+      // For the log: how far the recording's own clock is from the song clock, every 250 ms.
+      const gaps = [];
+      for (let i = 0; i < 22; i++) {
+        await page.waitForTimeout(250);
+        gaps.push(await page.evaluate(() => {
+          const e = window.tablab.engine;
+          return e.media && !e.media.paused ? e.media.currentTime - e._latency() - e.timeAt(e.ctx.currentTime) : NaN;
+        }));
+      }
       // The first quarter second is left out: the browser's time stretcher fades the sound in
       // there, which can move the very first click's attack by up to 20 ms. That fade is part
       // of the browser, not of TabLab's timing (the late start test below covers starting).
@@ -113,6 +121,8 @@ describe('backing track sync accuracy', () => {
       const mean = errs.reduce((a, b) => a + b, 0) / errs.length;
       const worst = Math.max(...errs.map(Math.abs));
       console.log(`  speed ${speed}: ${errs.length} clicks, mean ${ms(mean)} ms, worst ${ms(worst)} ms, all: ${errs.map(ms).join(' ')}`);
+      const anchors = await page.evaluate((start) => window.tablab.engine.anchors.map((a) => `${(a.R0 - start).toFixed(3)}/${a.A0.toFixed(3)}`), start);
+      console.log(`    clock anchors (ctx time after start / song time): ${anchors.join(' ')}; recording minus song clock: ${gaps.map(ms).join(' ')}`);
       assert.ok(Math.abs(mean) < 0.008, `average error ${ms(mean)} ms`);
       assert.ok(worst < 0.025, `worst error ${ms(worst)} ms`);
       assert.deepEqual(page.errors, []);
