@@ -82,27 +82,63 @@ describe('pages', () => {
     }
   });
 
-  it('fit every slide on phones and laptops without scrolling inside it', async () => {
+  // Slides that need scrolling inside, slides that had to leave something out to fit, and text wider than its box.
+  const measure = (page) =>
+    page.evaluate(() => {
+      const slides = [...document.querySelectorAll('.slide')];
+      return {
+        over: slides.filter((x) => x.scrollHeight > x.clientHeight + 1).map((x) => `${x.id} by ${x.scrollHeight - x.clientHeight}px`),
+        squeezed: slides.filter((x) => x.classList.contains('snugger') || x.querySelector('[data-trim]')).map((x) => x.id),
+        clipped: [...document.querySelectorAll('.slide :is(h1, h2, p, dd, li)')].filter((el) => el.scrollWidth > el.clientWidth + 1).map((el) => `${el.closest('.slide').id} ${el.tagName}`),
+        wide: document.documentElement.scrollWidth,
+      };
+    });
+  const phone = { hasTouch: true, isMobile: true };
+
+  it('fit every slide on phones and laptops without scrolling inside it or leaving anything out', async () => {
     const sizes = [
       [390, 844],
       [360, 740],
+      [360, 800],
       [412, 915],
       [1280, 800],
       [1366, 768],
     ];
     for (const path of PAGES) {
       for (const [width, height] of sizes) {
-        const phone = width < 500;
-        const page = await openPage(path, { viewport: { width, height }, context: phone ? { hasTouch: true, isMobile: true } : {} });
-        assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), width, `${path} at ${width}x${height} is not wider than the screen`);
-        const over = await page.$$eval('.slide', (s) => s.filter((x) => x.scrollHeight > x.clientHeight + 1).map((x) => `${x.id} by ${x.scrollHeight - x.clientHeight}px`));
-        assert.deepEqual(over, [], `${path} at ${width}x${height}`);
+        const page = await openPage(path, { viewport: { width, height }, context: width < 500 ? phone : {} });
+        const m = await measure(page);
+        const size = `${path} at ${width}x${height}`;
+        assert.equal(m.wide, width, `${size} is not wider than the screen`);
+        assert.deepEqual(m.over, [], size);
+        assert.deepEqual(m.squeezed, [], `${size} shows all of every slide`);
+        assert.deepEqual(m.clipped, [], `${size}: no text sticks out of its box`);
         await page.context().close();
       }
     }
-    // The smallest phones scroll inside a long slide, but nothing sticks out sideways.
-    const page = await openPage('about.html', { viewport: { width: 320, height: 568 }, context: { hasTouch: true, isMobile: true } });
-    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), 320);
+  });
+
+  it('tighten a slide that is too tall for a small phone, and loosen it again on a bigger screen', async () => {
+    // An iPhone SE in Safari, with its toolbars showing.
+    for (const path of PAGES) {
+      const page = await openPage(path, { viewport: { width: 375, height: 553 }, context: phone });
+      const m = await measure(page);
+      assert.deepEqual(m.over, [], `${path} on a small phone`);
+      assert.deepEqual(m.clipped, [], path);
+      // The techniques example is the tallest: it keeps its first line only.
+      assert.ok(m.squeezed.includes('techniques'), `${path}: ${m.squeezed}`);
+      assert.equal(await page.locator('#techniques [data-tab] svg.tl-system').count(), 1);
+      // On a bigger screen everything comes back.
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.waitForFunction(() => !document.querySelector('.snug, .snugger, [data-trim]'));
+      assert.equal(await page.locator('#techniques [data-tab] svg.tl-system').count(), 2);
+      assert.deepEqual((await measure(page)).over, [], `${path} after growing`);
+      assert.deepEqual(page.errors, []);
+      await page.context().close();
+    }
+    // The smallest phones may scroll inside a long slide, but nothing sticks out sideways.
+    const page = await openPage('about.html', { viewport: { width: 320, height: 568 }, context: phone });
+    assert.equal((await measure(page)).wide, 320);
     await page.context().close();
   });
 

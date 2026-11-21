@@ -113,12 +113,14 @@ function exampleSong(spec, bars) {
 const rect = (x, y, w, h, cls) => `<rect class="${cls}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${Math.max(0, w).toFixed(1)}" height="${h.toFixed(1)}" rx="4"/>`;
 const band = ({ sys, pos }, cls) => rect(pos.left, sys.staffTop - 9, pos.right - pos.left, sys.staffBottom - sys.staffTop + 18, cls);
 
-function drawTab(el) {
+/** Draw the example named by el.dataset.tab to fit the box. data-trim="1" keeps it to one line, like fit. */
+function drawTab(el, force = false) {
   const spec = EXAMPLES[el.dataset.tab];
   const width = Math.floor(el.clientWidth);
-  if (!spec || !width || el.dataset.width === String(width)) return;
+  if (!spec || !width || (!force && el.dataset.width === String(width))) return;
   el.dataset.width = String(width);
   const layoutWidth = spec.wide && width >= spec.wide * 0.85 ? Math.max(width, spec.wide) : width;
+  const fit = spec.fit || el.dataset.trim === '1';
   let bars = spec.measures.length;
   let song;
   let timeline;
@@ -127,7 +129,7 @@ function drawTab(el) {
     song = exampleSong(spec, bars);
     timeline = buildTimeline(song);
     layout = layoutScore(song, timeline, layoutWidth, { justify: true });
-    if (!spec.fit || layout.systems.length === 1 || bars === 1) break;
+    if (!fit || layout.systems.length === 1 || bars === 1) break;
     bars--;
   }
   el.innerHTML = layout.systems.map((sys) => renderSystem(song, timeline, layout, sys, { warnings: false })).join('');
@@ -426,6 +428,40 @@ function setupLinks() {
   });
 }
 
+// ------------------------------------------------------------------ fitting
+
+// A slide that is too tall for the screen (a small phone, a wide font, larger text) tightens up
+// before it needs scrolling inside: first less space around and between its parts, then the
+// small print marked "extra" makes way, and last a long example keeps only its first line.
+// Measured from the layout, so the reveal animation, which moves things down a little, does not count.
+const TIGHTER = ['snug', 'snugger'];
+
+function overflow(slide) {
+  const style = getComputedStyle(slide);
+  const inner = $('.inner', slide);
+  return parseFloat(style.paddingTop) + (inner ? inner.offsetHeight : 0) + parseFloat(style.paddingBottom) - slide.clientHeight;
+}
+
+function setTrim(el, on) {
+  if ((el.dataset.trim === '1') === on) return;
+  if (on) el.dataset.trim = '1';
+  else delete el.dataset.trim;
+  drawTab(el, true);
+}
+
+function fitSlides() {
+  for (const slide of $$('.slide')) {
+    const tabs = $$('[data-tab]', slide);
+    slide.classList.remove(...TIGHTER);
+    for (const el of tabs) setTrim(el, false);
+    for (const name of TIGHTER) {
+      if (overflow(slide) <= 1) break;
+      slide.classList.add(name);
+    }
+    if (overflow(slide) > 1) for (const el of tabs) setTrim(el, true);
+  }
+}
+
 // ------------------------------------------------------------------ start
 
 function start() {
@@ -454,8 +490,11 @@ function start() {
   const drawAll = () => {
     for (const el of $$('[data-tab]')) drawTab(el);
     for (const el of $$('[data-wave]')) drawWave(el);
+    fitSlides();
   };
   drawAll();
+  // Text can change size once the fonts are ready.
+  if (document.fonts) document.fonts.ready.then(fitSlides);
   let queued = false;
   new ResizeObserver(() => {
     if (queued) return;
