@@ -90,7 +90,7 @@ The repository includes a workflow that publishes the app every time `main` chan
 
 1. Push this project to a GitHub repository.
 2. In the repository, open **Settings → Pages**.
-3. Under **Build and deployment**, set **Source** to **GitHub Actions**.
+3. Under **Build and deployment**, set **Source** to **GitHub Actions**. (**Deploy from a branch**, with `main` and `/ (root)`, works too: GitHub then publishes the files exactly as they are in the branch.)
 4. Push a commit (or run the **Deploy to GitHub Pages** workflow from the **Actions** tab). The site appears at `https://<your-user-name>.github.io/<repository-name>/`.
 
 ## Tests

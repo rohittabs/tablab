@@ -62,6 +62,8 @@ test('every page works offline and is published', () => {
   }
   // The pages' own styles are cached too.
   for (const css of readdirSync(join(ROOT, 'css'))) assert.ok(sw.includes(`'css/${css}'`), `css/${css} is missing from sw.js`);
+  // Published straight from the branch, the files are served as they are, not run through Jekyll.
+  assert.ok(existsSync(join(ROOT, '.nojekyll')), '.nojekyll is missing');
 });
 
 test('the About page and the tour only ask for examples, drawings and icons that exist', () => {

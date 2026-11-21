@@ -1,5 +1,7 @@
 # Publishes TabLab to GitHub Pages whenever main changes.
 # One-time setup: Settings > Pages > Build and deployment > Source: GitHub Actions.
+# (Source: Deploy from a branch, main and / (root), works too. GitHub then publishes the branch
+# as it is, without Jekyll because of the .nojekyll file, and this workflow skips its deploy.)
 name: Deploy to GitHub Pages
 
 on:
@@ -36,8 +38,8 @@ jobs:
       - uses: actions/upload-pages-artifact@v5
         with:
           path: _site
-      # Until Pages is switched on (Source: GitHub Actions), skip the deploy with a note
-      # instead of failing. Any other answer goes ahead, so real errors still show.
+      # Deploy only when Pages is switched on with Source: GitHub Actions, and otherwise skip
+      # with a note instead of failing. Any other answer goes ahead, so real errors still show.
       - name: Check that GitHub Pages is switched on
         id: pages
         env:
@@ -46,9 +48,12 @@ jobs:
           code=$(curl -sS -o pages.json -w '%{http_code}' \
             -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/pages" || true)
-          if [ "$code" = "404" ] || { [ "$code" = "200" ] && [ "$(jq -r .build_type pages.json)" != "workflow" ]; }; then
+          if [ "$code" = "404" ]; then
             echo "on=false" >> "$GITHUB_OUTPUT"
             echo "::notice title=The website is not switched on yet::In Settings, Pages, set Source to GitHub Actions, then run this workflow again from the Actions tab."
+          elif [ "$code" = "200" ] && [ "$(jq -r .build_type pages.json)" != "workflow" ]; then
+            echo "on=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=GitHub Pages publishes this site straight from the branch::So this workflow has nothing to deploy. To publish only after the unit tests pass, set Source to GitHub Actions in Settings, Pages."
           else
             echo "on=true" >> "$GITHUB_OUTPUT"
           fi
