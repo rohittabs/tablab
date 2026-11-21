@@ -5,7 +5,7 @@
 <p align="center"><strong>A simple, free tab editor for guitar and ukulele students.</strong><br>
 Write tabs with keyboard shortcuts, sync a backing track, change tempo, and practice with a metronome. Runs in your browser.</p>
 
-<p align="center"><a href="https://rohittabs.github.io/tablab/"><strong>Open TabLab</strong></a></p>
+<p align="center"><a href="https://rohittabs.github.io/tablab/"><strong>Open TabLab</strong></a> · <a href="https://rohittabs.github.io/tablab/slides.html">Two minute tour</a> · <a href="https://rohittabs.github.io/tablab/about.html">Everything it does</a></p>
 
 ---
 
@@ -114,8 +114,13 @@ A `.tablab` file is JSON: the song settings (instrument, tuning, capo, tempo, ti
 
 ```
 index.html            the app page
-css/styles.css        styles for light and dark mode, and for printing
+about.html            everything TabLab does, as a page of slides
+slides.html           the two minute tour
+css/theme.css         colours for light and dark mode, and how tabs are drawn
+css/styles.css        the app's layout, and printing
+css/tour.css          the About page and the tour
 js/main.js            connects the editor, the player and the page
+js/tour.js            the About page and the tour: slides, and examples drawn by the tab renderer
 js/core/              song data, timing and sync maths, text tab export
 js/ui/                editor commands, tab drawing, saving, waveform panel
 js/audio/             sound engine, plucked string synthesis, beat detection

@@ -7,13 +7,17 @@
   <meta name="description" content="TabLab is a free, simple tab editor and player for guitar and ukulele students. Write tabs with the keyboard, play them back, slow them down and practice along with your own backing track.">
   <meta name="theme-color" content="#f6f6fb" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0f1016" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
   <meta property="og:title" content="TabLab">
   <meta property="og:description" content="A simple guitar and ukulele tab editor and player for students.">
-  <meta property="og:image" content="assets/social-preview.png">
+  <meta property="og:image" content="https://rohittabs.github.io/tablab/assets/social-preview.png">
+  <meta property="og:url" content="https://rohittabs.github.io/tablab/">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
   <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/theme.css">
   <link rel="stylesheet" href="css/styles.css">
   <script>
     // Apply the saved theme before first paint, so the page never flashes the wrong colours.
@@ -226,6 +230,7 @@
   <dialog id="dlg-help" class="dialog wide" aria-labelledby="help-title">
     <form method="dialog">
       <header><h2 id="help-title">Keyboard shortcuts</h2><button class="btn ghost icon-only" value="close" aria-label="Close" formnovalidate><span class="ic" data-icon="close"></span></button></header>
+      <p class="help-links">New to TabLab? <a href="slides.html">Take the two minute tour</a> or read <a href="about.html">everything it does</a>.</p>
       <div class="help-body" id="help-body"></div>
     </form>
   </dialog>

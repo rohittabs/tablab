@@ -1,0 +1,103 @@
+/* TabLab colours for light and dark mode, and the styles that draw tabs.
+   Shared by the app (index.html, with styles.css) and the About and tour pages (with tour.css). */
+
+:root {
+  --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --radius: 10px;
+  --radius-sm: 7px;
+  --shadow: 0 1px 2px rgb(16 18 30 / 6%), 0 6px 24px rgb(16 18 30 / 8%);
+  --grad: linear-gradient(135deg, #7c5cff, #17c3d6);
+  color-scheme: light;
+  --bg: #f4f4f9;
+  --paper: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #eeeef6;
+  --surface-3: #e4e4ef;
+  --border: #e0e0ec;
+  --ink: #1c1d29;
+  --muted: #646a80;
+  --tab-line: #b7bac9;
+  --tab-bar: #6a6e86;
+  --accent: #6447f5;
+  --accent-ink: #ffffff;
+  --accent-2: #0f9fb3;
+  --accent-soft: rgb(100 71 245 / 13%);
+  --accent-line: rgb(100 71 245 / 60%);
+  --sel: rgb(23 195 214 / 16%);
+  --loop: rgb(255 170 0 / 12%);
+  --play: #f0365a;
+  --warn: #d92d3f;
+  --amber: #b86e00;
+  --wave: #8f7dff;
+  --focus: #6447f5;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 8px 28px rgb(0 0 0 / 35%);
+  --bg: #0e0f15;
+  --paper: #161822;
+  --surface: #171923;
+  --surface-2: #222532;
+  --surface-3: #2b2f3f;
+  --border: #2a2e3d;
+  --ink: #eaebf4;
+  --muted: #9ca2b9;
+  --tab-line: #4a5066;
+  --tab-bar: #9095ad;
+  --accent: #9a86ff;
+  --accent-ink: #12121a;
+  --accent-2: #3fd3e6;
+  --accent-soft: rgb(154 134 255 / 18%);
+  --accent-line: rgb(154 134 255 / 70%);
+  --sel: rgb(63 211 230 / 15%);
+  --loop: rgb(255 184 0 / 10%);
+  --play: #ff5a78;
+  --warn: #ff6b78;
+  --amber: #f2b13c;
+  --wave: #7f6df0;
+  --focus: #9a86ff;
+}
+
+/* SVG tab drawing */
+.tl-string { stroke: var(--tab-line); stroke-width: 1; }
+.tl-bar { stroke: var(--tab-bar); stroke-width: 1.2; }
+.tl-knock { fill: var(--paper); }
+.tl-fret { fill: var(--ink); font: 650 12.5px var(--font); text-anchor: middle; font-variant-numeric: tabular-nums; }
+.tl-ghost { fill: var(--muted); }
+.tl-clef { fill: var(--ink); font-family: var(--font); font-weight: 800; text-anchor: middle; }
+.tl-strname { fill: var(--muted); font: 600 10px var(--font); text-anchor: end; }
+.tl-ts { fill: var(--ink); font-family: var(--font); font-weight: 800; text-anchor: middle; }
+.tl-num { fill: var(--muted); font: 600 10px var(--font); }
+.tl-num-over { fill: var(--warn); font-weight: 800; }
+.tl-num-under { fill: var(--amber); }
+.tl-missing { fill: var(--amber); font: 700 12px var(--font); text-anchor: middle; opacity: 0.8; }
+.tl-section-bg { fill: var(--accent-soft); stroke: var(--accent-line); stroke-width: 0.8; }
+.tl-section { fill: var(--accent); font: 700 10.5px var(--font); }
+.tl-text { fill: var(--ink); font: 700 12px var(--font); }
+.tl-fx { fill: var(--muted); font: italic 600 10px var(--font); }
+.tl-hp { fill: var(--muted); font: italic 600 10px var(--font); text-anchor: middle; }
+.tl-fxline, .tl-slur, .tl-vib, .tl-dash { stroke: var(--ink); stroke-width: 1.1; fill: none; stroke-linecap: round; }
+.tl-slur { stroke: var(--muted); }
+.tl-dash { stroke-dasharray: 3 3; stroke: var(--muted); }
+.tl-arrow { fill: var(--ink); }
+.tl-stem { stroke: var(--ink); stroke-width: 1.2; }
+.tl-flag { stroke: var(--ink); stroke-width: 1.4; fill: none; stroke-linecap: round; }
+.tl-ink { fill: var(--ink); }
+.tl-rest { stroke: var(--ink); stroke-width: 2; fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.tl-rest-thin { stroke: var(--ink); stroke-width: 1.4; fill: none; stroke-linecap: round; }
+.tl-tuplet { fill: var(--muted); font: italic 700 10px var(--font); text-anchor: middle; }
+.tl-cursor-beat { fill: var(--accent-soft); }
+.tl-cursor-note { fill: rgb(0 0 0 / 0%); stroke: var(--accent); stroke-width: 2; }
+.tl-cursor-note.pending { stroke-dasharray: 3 2; }
+.tl-sel { fill: var(--sel); }
+.tl-loop { fill: var(--loop); }
+.tl-playhead { stroke: var(--play); stroke-width: 2; }
+.tl-playbeat { fill: rgb(240 54 90 / 9%); }
+
+@media print {
+  /* Tabs print black on white, whatever the screen theme. */
+  :root, [data-theme="dark"] {
+    --paper: #fff; --ink: #000; --muted: #444; --tab-line: #888; --tab-bar: #333; --accent: #4b33c9; --accent-soft: #eee; --accent-line: #999;
+  }
+}

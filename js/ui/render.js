@@ -58,8 +58,10 @@ function tsChanged(song, timeline, mi) {
  * Lay the song out for a given container width.
  * Returns { systems: [ { index, top, height, width, staffTop, rows, measures: [...] } ], height }.
  * Each measure: { mi, x, w, beatsX: [{ x (note centre), left, right }] , showTs, first }.
+ * Every line but the last is stretched to the full width. justify: stretch the last line too
+ * (its notes up to 2.5 times further apart), as the short examples on the About page do.
  */
-export function layoutScore(song, timeline, width, { compact = false } = {}) {
+export function layoutScore(song, timeline, width, { compact = false, justify = false } = {}) {
   const avail = Math.max(240, width - 2 * MARGIN);
   const strings = song.tuning.length;
   const natural = song.measures.map((m, mi) => {
@@ -95,7 +97,8 @@ export function layoutScore(song, timeline, width, { compact = false } = {}) {
     const flex = line.reduce((a, m) => a + m.flex, 0);
     const isLast = li === lines.length - 1;
     let scale = 1;
-    if (!isLast || fixed + flex > avail) scale = Math.max(0.55, (avail - fixed) / flex);
+    if (!isLast || justify || fixed + flex > avail) scale = Math.max(0.55, (avail - fixed) / flex);
+    if (isLast && justify) scale = Math.min(scale, 2.5);
     if (isLast && fixed + flex * scale < avail * 0.55 && scale > 1) scale = 1;
     let x = MARGIN + CLEF_W;
     const measures = line.map((nm, k) => {

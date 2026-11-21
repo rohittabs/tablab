@@ -259,3 +259,20 @@ test('renderer: layout, hit testing and SVG output', () => {
   const narrow = layoutScore(e.song, tl, 320);
   assert.ok(narrow.systems.length >= 6);
 });
+
+test('renderer: the last line keeps its natural width unless asked to fill the line', () => {
+  const e = ed({ measures: 1 });
+  e.song.measures[0].beats = Array.from({ length: 8 }, (_, i) => ({ duration: 8, dotted: false, triplet: false, notes: [{ string: 0, fret: i }] }));
+  const tl = buildTimeline(e.song);
+  const end = (layout) => {
+    const m = layout.systems[0].measures[0];
+    return m.x + m.w;
+  };
+  const natural = end(layoutScore(e.song, tl, 600));
+  assert.ok(natural < 320, 'one bar stays at its natural width: ' + natural);
+  assert.ok(Math.abs(end(layoutScore(e.song, tl, 400, { justify: true })) - (400 - 14)) < 0.5, 'justify fills the line');
+  // The notes spread out at most 2.5 times, and not at all when the line would still be mostly empty.
+  const capped = end(layoutScore(e.song, tl, 1000, { justify: true }));
+  assert.ok(capped > natural * 1.8 && capped < 1000 - 14 - 100, 'stretched 2.5 times: ' + capped);
+  assert.equal(end(layoutScore(e.song, tl, 2000, { justify: true })), natural);
+});

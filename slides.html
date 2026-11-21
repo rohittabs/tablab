@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>TabLab in 2 minutes</title>
+  <meta name="description" content="A two minute tour of TabLab, the free tab editor and player for guitar and ukulele students. Write tabs with the keyboard, slow them down, loop them, and play along with a backing track.">
+  <meta name="theme-color" content="#f4f4f9">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TabLab in 2 minutes">
+  <meta property="og:description" content="Write it. Hear it. Play along. A free tab editor and player for guitar and ukulele students.">
+  <meta property="og:image" content="https://rohittabs.github.io/tablab/assets/social-preview.png">
+  <meta property="og:url" content="https://rohittabs.github.io/tablab/slides.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TabLab in 2 minutes">
+  <meta name="twitter:description" content="Write it. Hear it. Play along. A free tab editor and player for guitar and ukulele students.">
+  <meta name="twitter:image" content="https://rohittabs.github.io/tablab/assets/social-preview.png">
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/tour.css">
+  <script>
+    // The same light or dark mode as the app (the saved choice, else the system setting), before first paint.
+    (function () {
+      var d = document.documentElement, theme = null;
+      d.classList.add('js');
+      try { theme = JSON.parse(localStorage.getItem('tablab.prefs') || '{}').theme; } catch (e) {}
+      if (theme !== 'dark' && theme !== 'light') theme = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      d.setAttribute('data-theme', theme);
+      if (theme === 'dark') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0e0f15');
+      // If the page script cannot run, show everything instead of waiting for the animations.
+      setTimeout(function () { if (!d.hasAttribute('data-ready')) d.classList.add('static'); }, 2500);
+    })();
+  </script>
+  <script type="module" src="js/tour.js"></script>
+</head>
+<body>
+  <div class="stage">
+    <div class="phone">
+      <div class="progress" aria-hidden="true"><i id="progress"></i></div>
+      <div class="chrome">
+        <a class="home" href="./"><img src="assets/icons/icon.svg" alt="" width="26" height="26">Open TabLab</a>
+        <button class="theme-btn" id="btn-theme" type="button" aria-label="Switch to dark mode" title="Dark or light mode"></button>
+      </div>
+
+      <main class="feed" id="feed">
+
+        <section class="slide hero" id="top" aria-labelledby="h-top">
+          <div class="inner">
+            <div class="brandmark rise"><img src="assets/icons/icon.svg" alt="" width="56" height="56"><span class="wordmark">Tab<span>Lab</span></span></div>
+            <h1 class="gt rise" id="h-top">Write it. Hear it. Play along.</h1>
+            <p class="lead rise">A free tab editor for guitar and ukulele students.</p>
+            <div class="tab rise" data-tab="hero" role="img" aria-label="A guitar tab drawn by TabLab, with chord names, a hammer-on and a slide, and a playhead moving along it"></div>
+            <p class="rise">Nothing to install and no account. It runs in your browser.</p>
+          </div>
+          <div class="swipe" aria-hidden="true">
+            <svg class="on-touch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 14l6-6 6 6"/></svg>
+            <span class="on-touch">Swipe up</span>
+            <span class="on-mouse">Scroll or press ↓</span>
+            <svg class="on-mouse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10l6 6 6-6"/></svg>
+          </div>
+        </section>
+
+        <section class="slide" id="write" aria-labelledby="h-write">
+          <div class="inner">
+            <p class="kicker rise">Writing</p>
+            <h2 class="rise" id="h-write">Type a tab as fast as you can think it</h2>
+            <p class="rise">Click a string, type the fret number, and press <kbd>→</kbd> for the next beat. That is all there is to it.</p>
+            <div class="tab rise" data-tab="write" role="img" aria-label="A guitar tab with the cursor on the second note"></div>
+            <dl class="keys rise">
+              <dt><kbd>0</kbd> to <kbd>9</kbd></dt><dd>Fret number. Type two digits quickly for 10 to 24.</dd>
+              <dt><kbd>↑</kbd> <kbd>↓</kbd></dt><dd>Choose the string</dd>
+              <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Previous or next beat</dd>
+              <dt><kbd>Enter</kbd></dt><dd>Start a new bar</dd>
+            </dl>
+          </div>
+        </section>
+
+        <section class="slide" id="rhythm" aria-labelledby="h-rhythm">
+          <div class="inner">
+            <p class="kicker rise">Rhythm</p>
+            <h2 class="rise" id="h-rhythm">Note lengths with two keys</h2>
+            <div class="lengths rise" aria-hidden="true">
+              <div><span data-icon="whole"></span><b>Whole</b></div>
+              <div><span data-icon="half"></span><b>Half</b></div>
+              <div><span data-icon="quarter"></span><b>Quarter</b></div>
+              <div><span data-icon="eighth"></span><b>Eighth</b></div>
+              <div><span data-icon="sixteenth"></span><b>16th</b></div>
+              <div><span data-icon="thirtysecond"></span><b>32nd</b></div>
+            </div>
+            <dl class="keys rise">
+              <dt><kbd>-</kbd> <kbd>=</kbd></dt><dd>Shorter or longer note</dd>
+              <dt><kbd>.</kbd></dt><dd>Dotted note</dd>
+              <dt><kbd>T</kbd></dt><dd>Triplet</dd>
+              <dt><kbd>R</kbd></dt><dd>Rest</dd>
+            </dl>
+            <p class="rise">The bar number turns amber until a bar is full, so you can see when the rhythm does not add up yet.</p>
+          </div>
+        </section>
+
+        <section class="slide" id="techniques" aria-labelledby="h-techniques">
+          <div class="inner">
+            <p class="kicker rise">Techniques</p>
+            <h2 class="rise" id="h-techniques">One key each</h2>
+            <div class="tab rise" data-tab="techniques" role="img" aria-label="Two bars of guitar tab showing a hammer-on, a slide, a bend, vibrato, palm muting, dead notes, a ghost note, harmonics and a down strum"></div>
+            <ul class="keygrid rise">
+              <li><kbd>H</kbd><span>Hammer-on or pull-off</span></li>
+              <li><kbd>S</kbd><span>Slide</span></li>
+              <li><kbd>B</kbd><span>Bend</span></li>
+              <li><kbd>V</kbd><span>Vibrato</span></li>
+              <li><kbd>P</kbd><span>Palm mute</span></li>
+              <li><kbd>X</kbd><span>Dead note</span></li>
+              <li><kbd>G</kbd><span>Ghost note</span></li>
+              <li><kbd>N</kbd><span>Harmonic</span></li>
+              <li><kbd>D</kbd><kbd>U</kbd><span>Strum down or up</span></li>
+              <li><kbd>Shift</kbd><kbd>T</kbd><span>Chord name</span></li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="slide" id="instruments" aria-labelledby="h-instruments">
+          <div class="inner">
+            <p class="kicker rise">Guitar and ukulele</p>
+            <h2 class="rise" id="h-instruments">Six strings or four</h2>
+            <div class="grid rise">
+              <div class="card"><div class="n">Guitar</div><div class="l">Standard, drop D, open G, DADGAD and more</div></div>
+              <div class="card"><div class="n">Ukulele</div><div class="l">High G, low G, D tuning or baritone</div></div>
+            </div>
+            <div class="tab rise" data-tab="ukulele" role="img" aria-label="A ukulele tab: C and A minor chords strummed down and up, with the section label Strum along"></div>
+            <p class="rise">Add chord names, strum arrows, and labels like Verse and Chorus. There is a capo setting too.</p>
+          </div>
+        </section>
+
+        <section class="slide" id="play" aria-labelledby="h-play">
+          <div class="inner">
+            <p class="kicker rise">Playback</p>
+            <h2 class="rise" id="h-play">Hear what you wrote</h2>
+            <p class="rise">Press <kbd>Space</kbd>. TabLab plays the tab with a plucked string sound, and the playhead shows where you are.</p>
+            <div class="tab rise" data-tab="riff" role="img" aria-label="A palm muted power chord riff with a playhead moving along it"></div>
+            <p class="rise">You also hear each note as you type it, so a wrong fret stands out straight away.</p>
+          </div>
+        </section>
+
+        <section class="slide" id="practice" aria-labelledby="h-practice">
+          <div class="inner">
+            <p class="kicker rise">Practice</p>
+            <h2 class="rise" id="h-practice">Slow it down. Loop the hard part.</h2>
+            <div class="card speed rise" aria-hidden="true">
+              <div class="speed-read"><b>60%</b><span>Same pitch, just slower</span></div>
+              <div class="speed-track"><i class="speed-fill"></i><i class="speed-thumb"></i></div>
+              <div class="speed-scale"><span>25%</span><span>50%</span><span>75%</span><span>100%</span><span>125%</span><span>150%</span></div>
+            </div>
+            <div class="tab rise" data-tab="loop" role="img" aria-label="A tab with its last bar looped and a playhead going round it"></div>
+            <p class="rise">Set any speed from 25% to 150%. Press <kbd>L</kbd> to loop the bar you are on, or the beats you selected.</p>
+          </div>
+        </section>
+
+        <section class="slide" id="time" aria-labelledby="h-time">
+          <div class="inner">
+            <p class="kicker rise">Keeping time</p>
+            <h2 class="rise" id="h-time">Count in, then play</h2>
+            <div class="count rise" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span></div>
+            <dl class="keys rise">
+              <dt><kbd>C</kbd></dt><dd>Count-in: off, one bar or two bars</dd>
+              <dt><kbd>M</kbd></dt><dd>Metronome on or off</dd>
+            </dl>
+            <p class="rise">The count shows up big on the screen, so you can read it from your chair with the guitar in your hands.</p>
+          </div>
+        </section>
+
+        <section class="slide" id="backing" aria-labelledby="h-backing">
+          <div class="inner">
+            <p class="kicker rise">Backing track</p>
+            <h2 class="rise" id="h-backing">Play along with the real song</h2>
+            <p class="rise">Load an MP3 or another audio file, then press <strong>Auto sync</strong>. TabLab finds the tempo and the first beat for you.</p>
+            <div class="wave rise" data-wave="steady" role="img" aria-label="A waveform of a recording with bar lines 1, 2 and 3 on its beats, and a playhead moving along it"></div>
+            <p class="rise">The tab and the recording play together, at full speed or slowed down, and the recording keeps its pitch.</p>
+          </div>
+        </section>
+
+        <section class="slide" id="pins" aria-labelledby="h-pins">
+          <div class="inner">
+            <p class="kicker rise">Real bands drift</p>
+            <h2 class="rise" id="h-pins">Drag a bar onto its beat</h2>
+            <div class="wave rise" data-wave="drift" role="img" aria-label="Bar 3 is dragged onto its beat in the waveform and pinned, and bar 2 moves with it"></div>
+            <p class="rise">If the band speeds up or slows down, drag that bar's line onto its beat in the waveform. TabLab pins it there and stretches the bars in between to follow.</p>
+          </div>
+        </section>
+
+        <section class="slide" id="saving" aria-labelledby="h-saving">
+          <div class="inner">
+            <p class="kicker rise">Saving and sharing</p>
+            <h2 class="rise" id="h-saving">Your work saves itself</h2>
+            <div class="grid rise">
+              <div class="card"><div class="n">Auto</div><div class="l">Every change is kept in your browser as you go</div></div>
+              <div class="card"><div class="n">.tablab</div><div class="l">A song file to send to your teacher or a friend</div></div>
+              <div class="card"><div class="n">.txt</div><div class="l">A plain text tab to paste anywhere</div></div>
+              <div class="card"><div class="n">PDF</div><div class="l">Print it, or save it as a PDF</div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" id="anywhere" aria-labelledby="h-anywhere">
+          <div class="inner">
+            <p class="kicker rise">Anywhere</p>
+            <h2 class="rise" id="h-anywhere">Laptop, tablet or phone</h2>
+            <div class="pad rise" aria-hidden="true">
+              <span>1</span><span>2</span><span>3</span><span class="alt">↑</span>
+              <span>4</span><span>5</span><span>6</span><span class="alt">↓</span>
+              <span>7</span><span>8</span><span>9</span><span class="alt">⌫</span>
+              <span class="alt">←</span><span>0</span><span class="alt">→</span><span class="alt">▶</span>
+            </div>
+            <p class="rise">On a touch screen, a number pad appears for typing frets. After your first visit TabLab also works offline, and you can install it like an app.</p>
+            <p class="rise">Light or dark? Try the button at the top.</p>
+          </div>
+        </section>
+
+        <section class="slide" id="privacy" aria-labelledby="h-privacy">
+          <div class="inner">
+            <p class="kicker rise">Private</p>
+            <h2 class="rise" id="h-privacy">There is no server</h2>
+            <p class="lead rise">Your songs and your audio files stay on your own device.</p>
+            <ul class="list rise">
+              <li>No account to make</li>
+              <li>Nothing is uploaded</li>
+              <li>No ads and no tracking</li>
+              <li>Free, and open source</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="slide" id="go" aria-labelledby="h-go">
+          <div class="inner">
+            <div class="brandmark rise"><img src="assets/icons/icon.svg" alt="" width="56" height="56"><span class="wordmark">Tab<span>Lab</span></span></div>
+            <h1 class="gt rise" id="h-go">Press play.</h1>
+            <p class="url rise" data-app-url>rohittabs.github.io/tablab</p>
+            <p class="lead rise">Free for every guitar and ukulele student.</p>
+            <div class="cta-row rise">
+              <a class="cta" href="./">Open TabLab</a>
+              <button class="cta ghost" id="btn-copy" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy link</button>
+              <span class="copied" id="copied" role="status"></span>
+            </div>
+            <p class="rise">Want the full picture? Read <a href="about.html">everything TabLab does</a>.</p>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+</body>
+</html>
