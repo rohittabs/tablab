@@ -85,9 +85,49 @@ export function matchTuning(instrumentId, notes) {
   return inst.tunings.find((t) => t.notes.length === notes.length && t.notes.every((n, i) => n === notes[i]));
 }
 
-/** String labels for a tuning (uses the preset labels when the notes match a preset). */
+/**
+ * String labels for a tuning (uses the preset labels when the notes match a preset).
+ * The highest string is lower case on a guitar, as usual, and on a ukulele only when
+ * another string has the same name.
+ */
 export function stringLabels(instrumentId, notes) {
   const preset = matchTuning(instrumentId, notes);
   if (preset) return preset.labels.slice();
-  return notes.map((n, i) => (i === 0 ? noteName(n).toLowerCase() : noteName(n)));
+  const names = notes.map(noteName);
+  const lower = instrumentId === 'guitar' || names.indexOf(names[0], 1) > 0;
+  return names.map((n, i) => (i === 0 && lower ? n.toLowerCase() : n));
 }
+
+/**
+ * Key signatures, by the number of sharps (above 0) or flats (below 0), as song.key stores them.
+ * Each has the major key and its relative minor, which share the signature.
+ */
+export const KEYS = [
+  { key: -7, major: 'C♭', minor: 'A♭' },
+  { key: -6, major: 'G♭', minor: 'E♭' },
+  { key: -5, major: 'D♭', minor: 'B♭' },
+  { key: -4, major: 'A♭', minor: 'F' },
+  { key: -3, major: 'E♭', minor: 'C' },
+  { key: -2, major: 'B♭', minor: 'G' },
+  { key: -1, major: 'F', minor: 'D' },
+  { key: 0, major: 'C', minor: 'A' },
+  { key: 1, major: 'G', minor: 'E' },
+  { key: 2, major: 'D', minor: 'B' },
+  { key: 3, major: 'A', minor: 'F♯' },
+  { key: 4, major: 'E', minor: 'C♯' },
+  { key: 5, major: 'B', minor: 'G♯' },
+  { key: 6, major: 'F♯', minor: 'D♯' },
+  { key: 7, major: 'C♯', minor: 'A♯' },
+];
+
+/** "G major / E minor (1 sharp)" for a key signature. */
+export function keyName(key, { long = true } = {}) {
+  const k = KEYS.find((x) => x.key === key) || KEYS[7];
+  const base = `${k.major} major / ${k.minor} minor`;
+  if (!long) return base;
+  const n = Math.abs(key);
+  return n ? `${base} (${n} ${key > 0 ? 'sharp' : 'flat'}${n > 1 ? 's' : ''})` : `${base} (no sharps or flats)`;
+}
+
+/** Notes a custom tuning can use for each instrument (MIDI numbers, lowest to highest). */
+export const TUNING_RANGE = { guitar: [24, 76], ukulele: [43, 81] };

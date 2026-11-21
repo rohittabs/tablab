@@ -13,7 +13,8 @@ TabLab runs in the browser. There is nothing to install and no account to make. 
 
 ## What it can do
 
-- **Guitar and ukulele tabs.** Six string guitar (standard, drop D, open tunings and more) and four string ukulele (high G, low G, D tuning, baritone). Capo support.
+- **Guitar and ukulele tabs.** Six string guitar (standard, drop D, open tunings and more) and four string ukulele (high G, low G, D tuning, baritone), or a custom tuning where you pick the note of each string. A capo on any fret up to 12, and a key signature.
+- **Standard notation.** Show the music as notes on a staff above the tab, or the tab alone. Sharps and flats follow the key signature.
 - **Fast keyboard entry.** Type fret numbers, move with the arrow keys, change note lengths with `-` and `=`. Every command has a shortcut (press `?` in the app to see them all).
 - **Techniques.** Hammer-ons and pull-offs, slides, bends, vibrato, dead notes, ghost notes, harmonics, palm muting, strum directions, chord names and section labels.
 - **Playback.** Hear the tab with a plucked string sound, with a moving playhead that follows the music.
@@ -55,6 +56,7 @@ TabLab runs in the browser. There is nothing to install and no account to make. 
 | `Space` | Play or pause |
 | `L` `M` `C` | Loop, metronome, count-in |
 | `[` `]` | Practice speed slower or faster |
+| `Shift` + `N` | Show or hide standard notation above the tab |
 | `Ctrl` + `Z` / `Ctrl` + `Y` | Undo and redo |
 | `Ctrl` + `C` `X` `V` | Copy, cut and paste |
 | `Ctrl` + `S` | Download the song file |
@@ -100,7 +102,7 @@ npm test            # unit tests (Node.js only)
 npm run test:e2e    # browser tests in Chromium (run `npx playwright install chromium` once first)
 ```
 
-The browser tests check keyboard entry, every toolbar command, playback timing (count-in, metronome, practice speed, loops, tempo changes while playing), backing track loading, auto sync, dragging bar lines, that the recording and the tab play together, the layout on phones, and printing.
+The browser tests check keyboard entry, every toolbar command, playback timing (count-in, metronome, practice speed, loops, tempo changes while playing), backing track loading, auto sync, dragging bar lines, that the recording and the tab play together, the layout on phones, printing, the notation view, key signatures and custom tunings.
 
 ## Browser support
 
@@ -108,7 +110,7 @@ Recent versions of Chrome, Edge, Firefox and Safari (desktop and mobile). Keepin
 
 ## The .tablab file format
 
-A `.tablab` file is JSON: the song settings (instrument, tuning, capo, tempo, time signature), a list of bars, each with a list of beats, each with its notes (string and fret, plus techniques), and the backing track sync settings (the audio itself is not included). See `js/core/model.js` for the full description.
+A `.tablab` file is JSON: the song settings (instrument, tuning, capo, key signature, tempo, time signature), a list of bars, each with a list of beats, each with its notes (string and fret, plus techniques), and the backing track sync settings (the audio itself is not included). See `js/core/model.js` for the full description.
 
 ## Project layout
 
@@ -122,14 +124,16 @@ css/tour.css          the About page and the tour
 js/main.js            connects the editor, the player and the page
 js/tour.js            the About page and the tour: slides, and examples drawn by the tab renderer
 js/core/              song data, timing and sync maths, text tab export
-js/ui/                editor commands, tab drawing, saving, waveform panel
+js/ui/                editor commands, tab and notation drawing, saving, waveform panel
 js/audio/             sound engine, plucked string synthesis, beat detection
 examples/             example songs
-assets/               logo and app icons
+assets/               logo, app icons, and the license of the music font
 tests/                unit tests and browser tests
-tools/                local server, example and image generators
+tools/                local server, example, image and music symbol generators
 ```
 
 ## License
 
 [MIT](LICENSE). The example songs are original pieces written for TabLab and may be used freely.
+
+The music symbols in the notation view (clef, noteheads, rests, flags, sharps, flats and naturals) are outlines from the [Noto Music](https://fonts.google.com/noto/specimen/Noto+Music) font, copyright The Noto Project Authors, used under the [SIL Open Font License 1.1](assets/fonts/NotoMusic-OFL.txt). `tools/make-glyphs.mjs` extracts them into `js/ui/glyphs.js`.

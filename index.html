@@ -62,8 +62,8 @@
 
     <div class="song-head">
       <input id="song-title" class="song-title" type="text" maxlength="120" spellcheck="false" aria-label="Song title" placeholder="Song title">
-      <button id="btn-song" class="song-chip" type="button" title="Song settings: instrument, tuning, capo, tempo"></button>
-      <button id="btn-song-mini" class="tb icon-only song-mini" type="button" aria-label="Song settings" title="Song settings: instrument, tuning, capo, tempo"><span class="ic" data-icon="gear"></span></button>
+      <button id="btn-song" class="song-chip" type="button" title="Song settings: instrument, tuning, capo, key, tempo"></button>
+      <button id="btn-song-mini" class="tb icon-only song-mini" type="button" aria-label="Song settings" title="Song settings: instrument, tuning, capo, key, tempo"><span class="ic" data-icon="gear"></span></button>
     </div>
 
     <nav class="top-actions" aria-label="File and app">
@@ -80,6 +80,7 @@
         </div>
       </div>
       <span class="sep" aria-hidden="true"></span>
+      <button id="btn-view" class="tb" type="button" aria-pressed="false" title="Show standard notation above the tab (Shift+N)"><span class="ic" data-icon="notation"></span><span class="lbl">Notation</span></button>
       <button id="btn-theme" class="tb icon-only" type="button" aria-label="Switch to dark mode" title="Dark or light mode"><span class="ic" data-icon="moon"></span></button>
       <button id="btn-help" class="tb icon-only" type="button" aria-label="Keyboard shortcuts and help" title="Shortcuts and help (?)"><span class="ic" data-icon="help"></span></button>
     </nav>
@@ -248,10 +249,15 @@
         </fieldset>
         <label>Tuning <select name="tuning"></select></label>
         <label>Capo <select name="capo"></select></label>
+        <fieldset class="custom-tuning" id="custom-tuning" hidden>
+          <legend>Custom tuning, lowest string first</legend>
+          <div class="strings" id="custom-strings"></div>
+        </fieldset>
         <label>Tempo (BPM) <input name="tempo" type="number" min="20" max="320" step="1" required></label>
         <label>Time signature
           <span class="ts-pick"><select name="tsNum"></select> / <select name="tsDen"></select></span>
         </label>
+        <label class="full">Key signature <select name="key"></select></label>
         <p class="warn" id="song-warn" hidden></p>
       </div>
       <footer>

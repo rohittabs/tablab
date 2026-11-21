@@ -4,6 +4,7 @@
 import { WHOLE } from '../core/constants.js';
 import { stringLabels } from '../core/constants.js';
 import { connectedNote } from '../core/timing.js';
+import { NS, analyzeMeasure, drawNotation, headerWidth } from './notation.js';
 
 export const LS = 13; // distance between strings
 const BASE = { 1: 66, 2: 46, 4: 33, 8: 25, 16: 20, 32: 17 };
@@ -34,8 +35,10 @@ function textWidth(s, size = 11) {
   return s.length * size * 0.58;
 }
 
-function beatNaturalWidth(beat, nextBeat) {
+function beatNaturalWidth(beat, nextBeat, nb) {
   let w = BASE[beat.duration] * (beat.dotted ? 1.22 : 1) * (beat.triplet ? 0.92 : 1);
+  // In the notation view, room for accidentals before the notes and side heads after them.
+  if (nb && !nb.rest) w += nb.offset + nb.extraRight;
   let need = 0;
   for (const n of beat.notes) {
     let e = fretLabel(n).length * 7 + 10;
@@ -44,7 +47,7 @@ function beatNaturalWidth(beat, nextBeat) {
     need = Math.max(need, e);
   }
   if (beat.text && nextBeat && nextBeat.text) need = Math.max(need, textWidth(beat.text) + 8);
-  return Math.max(w, need, 18);
+  return Math.max(w, need + (nb && !nb.rest ? nb.offset : 0), 18);
 }
 
 function tsChanged(song, timeline, mi) {
@@ -60,12 +63,16 @@ function tsChanged(song, timeline, mi) {
  * Each measure: { mi, x, w, beatsX: [{ x (note centre), left, right }] , showTs, first }.
  * Every line but the last is stretched to the full width. justify: stretch the last line too
  * (its notes up to 2.5 times further apart), as the short examples on the About page do.
+ * notation: draw standard notation above the tab (layout.nota has how each bar is written,
+ * and each system gets notaTop, the y of the top line of the notation staff).
  */
-export function layoutScore(song, timeline, width, { compact = false, justify = false } = {}) {
+export function layoutScore(song, timeline, width, { compact = false, justify = false, notation = false } = {}) {
   const avail = Math.max(240, width - 2 * MARGIN);
   const strings = song.tuning.length;
+  const nota = notation ? song.measures.map((_, mi) => analyzeMeasure(song, timeline, mi)) : null;
+  const clefW = notation ? Math.max(CLEF_W, headerWidth(song)) : CLEF_W;
   const natural = song.measures.map((m, mi) => {
-    const beats = m.beats.map((b, bi) => beatNaturalWidth(b, m.beats[bi + 1]));
+    const beats = m.beats.map((b, bi) => beatNaturalWidth(b, m.beats[bi + 1], nota && nota[mi].beats[bi]));
     const showTs = tsChanged(song, timeline, mi);
     const flex = beats.reduce((a, b) => a + b, 0);
     // Underfull measures keep some space for their missing time, so the bar does not look complete.
@@ -77,13 +84,13 @@ export function layoutScore(song, timeline, width, { compact = false, justify = 
   // Greedy line breaking.
   const lines = [];
   let cur = [];
-  let curW = CLEF_W;
+  let curW = clefW;
   for (const nm of natural) {
     const w = nm.fixed + nm.flex;
     if (cur.length && curW + w > avail) {
       lines.push(cur);
       cur = [];
-      curW = CLEF_W;
+      curW = clefW;
     }
     cur.push(nm);
     curW += w;
@@ -93,20 +100,22 @@ export function layoutScore(song, timeline, width, { compact = false, justify = 
   const systems = [];
   let top = 0;
   lines.forEach((line, li) => {
-    const fixed = CLEF_W + line.reduce((a, m) => a + m.fixed, 0);
+    const fixed = clefW + line.reduce((a, m) => a + m.fixed, 0);
     const flex = line.reduce((a, m) => a + m.flex, 0);
     const isLast = li === lines.length - 1;
     let scale = 1;
     if (!isLast || justify || fixed + flex > avail) scale = Math.max(0.55, (avail - fixed) / flex);
     if (isLast && justify) scale = Math.min(scale, 2.5);
     if (isLast && fixed + flex * scale < avail * 0.55 && scale > 1) scale = 1;
-    let x = MARGIN + CLEF_W;
+    let x = MARGIN + clefW;
     const measures = line.map((nm, k) => {
       const mx = x;
       let bx = mx + PAD_L + (nm.showTs ? TS_W : 0);
-      const beatsX = nm.beats.map((bw) => {
+      const beatsX = nm.beats.map((bw, bi) => {
         const w = bw * scale;
-        const pos = { left: bx, right: bx + w, x: bx + Math.min(NOTE_OFFSET, w / 2) };
+        const nb = nota && nota[nm.mi].beats[bi];
+        const off = NOTE_OFFSET + (nb && !nb.rest ? nb.offset : 0);
+        const pos = { left: bx, right: bx + w, x: bx + Math.min(off, w / 2) };
         bx += w;
         return pos;
       });
@@ -123,15 +132,29 @@ export function layoutScore(song, timeline, width, { compact = false, justify = 
         if (b.strum || b.palmMute || b.notes.some((n) => n.bend || n.vibrato)) hasFx = true;
       }
     }
-    const rows = { top: ROW_TOP, text: hasText ? ROW_TEXT : 0, fx: hasFx ? ROW_FX : 0 };
-    const staffTop = rows.top + rows.text + rows.fx + 4;
+    const rows = { top: ROW_TOP, text: hasText ? ROW_TEXT : 0, nota: 0, fx: hasFx ? ROW_FX : 0 };
+    let notaTop = null;
+    if (nota) {
+      // Room above and below the notation staff for this line's highest and lowest notes and stems.
+      let hi = Infinity;
+      let lo = -Infinity;
+      for (const m of measures) {
+        hi = Math.min(hi, nota[m.mi].top);
+        lo = Math.max(lo, nota[m.mi].bottom);
+      }
+      rows.nota = lo - hi + 6;
+      notaTop = rows.top + rows.text + 2 + (-4 * NS - hi);
+    }
+    const staffTop = rows.top + rows.text + rows.nota + rows.fx + 4;
     const staffH = (strings - 1) * LS;
-    const height = staffTop + staffH + (compact ? 12 : BELOW);
+    // The notation shows the rhythm, so the tab needs no stems below it.
+    const height = staffTop + staffH + (compact || nota ? 14 : BELOW);
     const sysWidth = Math.max(width, x + MARGIN);
-    systems.push({ index: li, top, height, width: sysWidth, staffTop, staffBottom: staffTop + staffH, rows, measures, right: x });
+    const contentTop = notaTop !== null ? notaTop - 8 : staffTop - 14;
+    systems.push({ index: li, top, height, width: sysWidth, staffTop, staffBottom: staffTop + staffH, notaTop, contentTop, rows, measures, right: x });
     top += height + SYSTEM_GAP;
   });
-  return { systems, height: top, strings };
+  return { systems, height: top, strings, nota, notation: !!nota };
 }
 
 /** Find where a measure and beat are drawn. */
@@ -155,6 +178,8 @@ export function hitTest(layout, sysIndex, x, y) {
   for (const m of sys.measures) if (x >= m.x) meas = m;
   let b = 0;
   for (let i = 0; i < meas.beatsX.length; i++) if (x >= meas.beatsX[i].left - 2) b = i;
+  // Above the tab (on the notation staff), keep the string the cursor is on.
+  if (sys.notaTop !== null && sys.notaTop !== undefined && y < sys.staffTop - LS) return { m: meas.mi, b, s: undefined };
   const s = Math.round((y - sys.staffTop) / LS);
   return { m: meas.mi, b, s: Math.max(0, Math.min(layout.strings - 1, s)) };
 }
@@ -299,7 +324,7 @@ export function renderSystem(song, timeline, layout, sys, { warnings = true } = 
   const yOf = (s) => st + s * LS;
   const rowTopY = 11;
   const rowTextY = sys.rows.top + 11;
-  const rowFxY = sys.rows.top + sys.rows.text + 10;
+  const rowFxY = sys.rows.top + sys.rows.text + sys.rows.nota + 10;
   let bg = '';
   let lines = '';
   let marks = '';
@@ -309,6 +334,11 @@ export function renderSystem(song, timeline, layout, sys, { warnings = true } = 
   // Strings and the opening bar line
   for (let s = 0; s < strings; s++) lines += `<line class="tl-string" x1="${left}" y1="${yOf(s)}" x2="${right}" y2="${yOf(s)}"/>`;
   lines += `<line class="tl-bar" x1="${left}" y1="${st}" x2="${left}" y2="${sb}"/>`;
+  if (layout.notation) {
+    const n = drawNotation(song, timeline, layout, sys, { top: sys.notaTop, left, right });
+    lines += n.lines + `<line class="tl-bar" x1="${left}" y1="${sys.notaTop}" x2="${left}" y2="${sb}"/>`;
+    marks += n.marks;
+  }
   // TAB clef, sized to the staff
   const clefSize = strings >= 6 ? 13 : 10;
   const clefGap = (sb - st) / 3;
@@ -440,7 +470,7 @@ export function renderSystem(song, timeline, layout, sys, { warnings = true } = 
       const mx = meas.x + meas.w - PAD_R - meas.missing / 2;
       marks += `<text class="tl-missing" x="${mx.toFixed(1)}" y="${((st + sb) / 2 + 3).toFixed(1)}">…</text>`;
     }
-    marks += drawRhythm(song, timeline, meas, sys);
+    if (!layout.notation) marks += drawRhythm(song, timeline, meas, sys);
     if (meas.mi === sys.measures[sys.measures.length - 1].mi) flushPm();
   }
   flushPm();

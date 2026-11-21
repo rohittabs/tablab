@@ -1,6 +1,6 @@
 // TabLab app: wires the editor, renderer, audio engine and backing track panel to the page.
 
-import { INSTRUMENTS, MAX_SPEED, MAX_TEMPO, MIN_SPEED, MIN_TEMPO, TS_DENOMINATORS, TS_NUMERATORS, matchTuning, stringLabels } from './core/constants.js';
+import { INSTRUMENTS, KEYS, MAX_SPEED, MAX_TEMPO, MIN_SPEED, MIN_TEMPO, TS_DENOMINATORS, TS_NUMERATORS, TUNING_RANGE, keyName, matchTuning, noteName, noteNameOctave, stringLabels } from './core/constants.js';
 import { createSong, effectiveTimeSignature, measureCapacity, measureContentTicks, normalizeSong, noteAt, uid } from './core/model.js';
 import { SyncMap, buildTimeline, comparePos, locateTick } from './core/timing.js';
 import { describeDuration, songToText } from './core/textTab.js';
@@ -31,6 +31,7 @@ const prefs = store.loadPrefs({
   preview: true,
   keypad: null,
   syncOpen: false,
+  notation: false, // show standard notation above the tab
 });
 
 const engine = new AudioEngine();
@@ -196,7 +197,7 @@ function queueRender() {
 function renderScore() {
   const container = $('#systems');
   const width = printing ? PRINT_WIDTH : container.clientWidth || 800;
-  layout = layoutScore(editor.song, timeline, width);
+  layout = layoutScore(editor.song, timeline, width, { notation: prefs.notation });
   container.innerHTML = layout.systems.map((sys) => renderSystem(editor.song, timeline, layout, sys)).join('');
   playhead = null;
   updateOverlay();
@@ -214,7 +215,9 @@ function rect(x, y, w, h, cls, extra = '') {
 
 function beatBand(loc, cls) {
   const { sys, pos } = loc;
-  return rect(pos.left, sys.staffTop - 9, pos.right - pos.left, sys.staffBottom - sys.staffTop + 18, cls, 'rx="4"');
+  // In the notation view the band covers the notation staff too.
+  const top = sys.notaTop !== null && sys.notaTop !== undefined ? sys.notaTop - 6 : sys.staffTop - 9;
+  return rect(pos.left, top, pos.right - pos.left, sys.staffBottom + 9 - top, cls, 'rx="4"');
 }
 
 /** Cursor, selection and loop range, drawn on top of the tab. */
@@ -286,10 +289,15 @@ function songSummary(long = false) {
   const s = editor.song;
   const inst = INSTRUMENTS[s.instrument].name;
   const preset = matchTuning(s.instrument, s.tuning);
-  const tuning = preset ? (long ? preset.name : preset.name.replace(/\s*\(.*\)$/, '')) : stringLabels(s.instrument, s.tuning).slice().reverse().join(' ');
+  const custom = s.tuning.map(noteName).reverse().join(' ');
+  const tuning = preset ? (long ? preset.name : preset.name.replace(/\s*\(.*\)$/, '')) : long ? `Custom tuning (${custom})` : custom;
   const ts = s.timeSignature;
   const parts = [inst, tuning];
   if (s.capo) parts.push(`Capo ${s.capo}`);
+  if (s.key) {
+    const k = KEYS.find((x) => x.key === s.key);
+    parts.push(long ? `Key of ${keyName(s.key, { long: false })}` : `Key ${k.major}/${k.minor}m`);
+  }
   parts.push(`${ts[0]}/${ts[1]}`, `${Math.round(s.tempo)} BPM`);
   if (long && s.artist) parts.unshift(s.artist);
   return parts.join(' · ');
@@ -470,7 +478,7 @@ function drawPlayhead(sys, x) {
     if (!svg) return;
     const el = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     el.setAttribute('class', 'tl-playhead');
-    el.setAttribute('y1', String(sys.staffTop - 14));
+    el.setAttribute('y1', String(sys.contentTop));
     el.setAttribute('y2', String(sys.staffBottom + 14));
     svg.querySelector('.tl-over').after(el);
     playhead = { el, sys: sys.index };
@@ -829,7 +837,8 @@ function handleKey(e) {
       flag('ghost');
       return true;
     case 'n':
-      flag('harmonic');
+      if (shift) setNotation(!prefs.notation);
+      else flag('harmonic');
       return true;
     case 'p':
       editor.togglePalmMute();
@@ -1047,16 +1056,53 @@ function fillSongForm(form, song, isNew) {
   form.tsDen.innerHTML = TS_DENOMINATORS.map((n) => `<option>${n}</option>`).join('');
   form.tsNum.value = String(isNew ? 4 : song.timeSignature[0]);
   form.tsDen.value = String(isNew ? 4 : song.timeSignature[1]);
+  // C major first, then the sharp keys, then the flat keys.
+  const keys = [...KEYS.filter((k) => k.key >= 0), ...KEYS.filter((k) => k.key < 0).reverse()];
+  form.key.innerHTML = keys.map((k) => `<option value="${k.key}">${keyName(k.key)}</option>`).join('');
+  form.key.value = String(isNew ? 0 : song.key || 0);
   updateSongWarn(form, song, isNew);
 }
 
 function fillTunings(form, instrument, current) {
   const inst = INSTRUMENTS[instrument];
   const preset = current ? matchTuning(instrument, current) : null;
-  let html = inst.tunings.map((t) => `<option value="${t.id}">${t.name}</option>`).join('');
-  if (current && !preset && current.length === inst.strings) html += `<option value="custom">Custom (${stringLabels(instrument, current).slice().reverse().join(' ')})</option>`;
-  form.tuning.innerHTML = html;
-  form.tuning.value = preset ? preset.id : current && current.length === inst.strings ? 'custom' : inst.tunings[0].id;
+  const isCustom = current && !preset && current.length === inst.strings;
+  form.tuning.innerHTML = inst.tunings.map((t) => `<option value="${t.id}">${t.name}</option>`).join('') + '<option value="custom">Custom</option>';
+  form.tuning.value = isCustom ? 'custom' : preset ? preset.id : inst.tunings[0].id;
+  fillCustomStrings(form, instrument, isCustom ? current : (preset || inst.tunings[0]).notes);
+}
+
+/** One note picker per string, lowest string on the left, as tunings are usually written. */
+function fillCustomStrings(form, instrument, notes) {
+  const [lo, hi] = TUNING_RANGE[instrument];
+  const box = $('#custom-strings');
+  const n = notes.length;
+  box.style.setProperty('--n', String(n));
+  const options = [];
+  for (let m = lo; m <= hi; m++) options.push(`<option value="${m}">${noteNameOctave(m)}</option>`);
+  box.innerHTML = notes
+    .map((_, i) => {
+      const s = n - 1 - i; // string index, from the lowest string
+      const label = s === n - 1 ? `String ${s + 1}, the lowest` : s === 0 ? 'String 1, the highest' : `String ${s + 1}`;
+      return `<select data-string="${s}" aria-label="${label}">${options.join('')}</select>`;
+    })
+    .join('');
+  for (const sel of box.querySelectorAll('select')) {
+    const note = notes[Number(sel.dataset.string)];
+    sel.value = String(Math.min(hi, Math.max(lo, note)));
+  }
+  $('#custom-tuning').hidden = form.tuning.value !== 'custom';
+}
+
+/** The tuning the dialog shows: string 1 (the highest) first, as songs store it. */
+function formTuning(form, instrument) {
+  if (form.tuning.value !== 'custom') {
+    const inst = INSTRUMENTS[instrument];
+    return (inst.tunings.find((t) => t.id === form.tuning.value) || inst.tunings[0]).notes.slice();
+  }
+  const notes = [];
+  for (const sel of $('#custom-strings').querySelectorAll('select')) notes[Number(sel.dataset.string)] = Number(sel.value);
+  return notes;
 }
 
 function updateSongWarn(form, song, isNew) {
@@ -1082,10 +1128,22 @@ function openSongDialog(isNew = false) {
   fillSongForm(form, isNew ? createSong() : song, isNew);
   form.onchange = (e) => {
     if (e.target.name === 'instrument') {
-      fillTunings(form, form.instrument.value, form.instrument.value === song.instrument ? song.tuning : null);
+      fillTunings(form, form.instrument.value, form.instrument.value === song.instrument && !isNew ? song.tuning : null);
       updateSongWarn(form, song, isNew);
+    } else if (e.target.name === 'tuning') {
+      // Custom starts from the tuning chosen before, so one string is easy to change.
+      const wasHidden = $('#custom-tuning').hidden;
+      if (form.tuning.value === 'custom' && wasHidden) {
+        const inst = INSTRUMENTS[form.instrument.value];
+        const prev = form.tuning.dataset.prev;
+        const base = inst.tunings.find((t) => t.id === prev);
+        fillCustomStrings(form, form.instrument.value, base ? base.notes : formTuning(form, form.instrument.value));
+      }
+      $('#custom-tuning').hidden = form.tuning.value !== 'custom';
     }
+    form.tuning.dataset.prev = form.tuning.value;
   };
+  form.tuning.dataset.prev = form.tuning.value;
   dlg.returnValue = '';
   dlg.showModal();
   dlg.addEventListener(
@@ -1100,10 +1158,14 @@ function openSongDialog(isNew = false) {
       const title = form.title.value.trim() || 'Untitled';
       const artist = form.artist.value.trim();
       const capo = Number(form.capo.value) || 0;
+      const key = Number(form.key.value) || 0;
+      const tuning = formTuning(form, instrument);
       if (isNew) {
-        const s = createSong({ instrument, tuningId, title, tempo, timeSignature: ts });
+        const s = createSong({ instrument, tuningId: tuningId === 'custom' ? undefined : tuningId, title, tempo, timeSignature: ts });
         s.artist = artist;
         s.capo = capo;
+        s.key = key;
+        s.tuning = tuning;
         setSong(s, { message: 'New song ready. Click a string and type a fret number.' });
         return;
       }
@@ -1111,6 +1173,7 @@ function openSongDialog(isNew = false) {
       song.title = title;
       song.artist = artist;
       song.capo = capo;
+      song.key = key;
       song.tempo = Math.round(tempo * 100) / 100;
       song.timeSignature = ts;
       if (song.measures.length > 1) {
@@ -1122,12 +1185,9 @@ function openSongDialog(isNew = false) {
           if (prev[0] === mts[0] && prev[1] === mts[1]) delete song.measures[i].timeSignature;
         }
       }
-      if (tuningId !== 'custom' || instrument !== song.instrument) {
-        const preset = INSTRUMENTS[instrument].tunings.find((t) => t.id === tuningId) || INSTRUMENTS[instrument].tunings[0];
-        song.instrument = instrument;
-        song.tuning = preset.notes.slice();
-        for (const m of song.measures) for (const b of m.beats) b.notes = b.notes.filter((n) => n.string < song.tuning.length);
-      }
+      song.instrument = instrument;
+      song.tuning = tuning;
+      for (const m of song.measures) for (const b of m.beats) b.notes = b.notes.filter((n) => n.string < song.tuning.length);
       editor.clampCursor();
       songChanged();
     },
@@ -1393,6 +1453,21 @@ function openHelp() {
   dlg.addEventListener('close', focusScore, { once: true });
 }
 
+// ------------------------------------------------------------------ view
+
+/** Show standard notation above the tab, or the tab alone. */
+function setNotation(on, persist = true) {
+  prefs.notation = !!on;
+  const btn = $('#btn-view');
+  btn.setAttribute('aria-pressed', String(prefs.notation));
+  btn.title = prefs.notation ? 'Show the tab only (Shift+N)' : 'Show standard notation above the tab (Shift+N)';
+  if (persist) {
+    savePrefs();
+    renderScore();
+    scrollToCursor();
+  }
+}
+
 // ------------------------------------------------------------------ theme
 
 function applyTheme(theme, persist = true) {
@@ -1416,6 +1491,7 @@ function wire() {
     if (!prefs.theme) applyTheme(e.matches ? 'dark' : 'light', false);
   });
   $('#btn-help').addEventListener('click', openHelp);
+  $('#btn-view').addEventListener('click', () => setNotation(!prefs.notation));
   $('#btn-new').addEventListener('click', () => openSongDialog(true));
   $('#btn-song').addEventListener('click', () => openSongDialog(false));
   $('#btn-song-mini').addEventListener('click', () => openSongDialog(false));
@@ -1630,6 +1706,7 @@ async function start() {
   engine.rate = prefs.speed;
   setCountIn(prefs.countIn);
   setMetronome(prefs.metronome);
+  setNotation(prefs.notation, false);
   engine.volumes = { ...engine.volumes, ...prefs.volumes };
   engine.synthOn = prefs.synthOn;
   $('#chk-tab-sound').checked = prefs.synthOn;

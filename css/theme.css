@@ -94,6 +94,15 @@
 .tl-loop { fill: var(--loop); }
 .tl-playhead { stroke: var(--play); stroke-width: 2; }
 .tl-playbeat { fill: rgb(240 54 90 / 9%); }
+/* Standard notation, above the tab in the notation view */
+.tl-staff { stroke: var(--tab-line); stroke-width: 1; }
+.tl-ledger { stroke: var(--ink); stroke-width: 1; }
+.tl-nstem { stroke: var(--ink); stroke-width: 1; }
+.tl-xhead { stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; }
+.tl-diamond { fill: none; stroke: var(--ink); stroke-width: 1.2; }
+.tl-paren { fill: var(--muted); font: 500 12px var(--font); text-anchor: middle; }
+.tl-clef8 { fill: var(--ink); font: 700 9px var(--font); text-anchor: middle; }
+.tl-ts-nota { font-size: 19px; }
 
 @media print {
   /* Tabs print black on white, whatever the screen theme. */

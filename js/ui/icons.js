@@ -50,6 +50,7 @@ export const ICONS = {
   zoomOut: S('<circle cx="8.8" cy="8.8" r="5.3"/><path d="M12.8 12.8 17 17M6.6 8.8h4.4"/>'),
   fit: S('<path d="M3 7V4.5A1.5 1.5 0 0 1 4.5 3H7M13 3h2.5A1.5 1.5 0 0 1 17 4.5V7M17 13v2.5a1.5 1.5 0 0 1-1.5 1.5H13M7 17H4.5A1.5 1.5 0 0 1 3 15.5V13"/>'),
   trash: S('<path d="M4 5.5h12M8 5.5V4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1.5M5.5 5.5l.8 10.4a1.3 1.3 0 0 0 1.3 1.1h4.8a1.3 1.3 0 0 0 1.3-1.1l.8-10.4"/>'),
+  notation: S('<path d="M2.5 4h15M2.5 7h15M2.5 10h15" stroke-width="1.2"/><ellipse cx="9" cy="10" rx="2.3" ry="1.7" transform="rotate(-20 9 10)" fill="currentColor" stroke="none"/><path d="M11.1 9.4V2.6" stroke-width="1.3"/><path d="M2.5 13.5h15M2.5 16.5h15" stroke-width="1.2"/>'),
   music: S('<path d="M7.5 15.2V4.6l9-1.8v10.6"/><circle cx="5.6" cy="15.2" r="2"/><circle cx="14.6" cy="13.4" r="2"/>'),
 };
 

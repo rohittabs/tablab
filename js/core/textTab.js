@@ -1,6 +1,6 @@
 // Plain text (ASCII) tab export, the format students paste into forums and chats.
 
-import { DURATION_NAMES, INSTRUMENTS, matchTuning, stringLabels } from './constants.js';
+import { DURATION_NAMES, INSTRUMENTS, keyName, matchTuning, stringLabels } from './constants.js';
 import { effectiveTimeSignature } from './model.js';
 import { connectedNote } from './timing.js';
 
@@ -78,6 +78,7 @@ export function songToText(song, { from = 0, to = song.measures.length - 1, line
     const ts = song.timeSignature;
     const parts = [inst, `Tuning: ${tuning}`];
     if (song.capo) parts.push(`Capo ${song.capo}`);
+    if (song.key) parts.push(`Key: ${keyName(song.key, { long: false })}`);
     parts.push(`${Math.round(song.tempo)} BPM`, `${ts[0]}/${ts[1]}`);
     out.push(parts.join(', '));
     out.push('');

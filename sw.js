@@ -1,7 +1,7 @@
 // Service worker: lets TabLab open without an internet connection after the first visit.
 // Network first, so a new version shows up straight away; the saved copy is used when offline.
 
-const CACHE = 'tablab-v1';
+const CACHE = 'tablab-v2';
 
 // Everything the app needs to start. Keep in sync with the files in the repository
 // (tests/unit/files.test.mjs checks that each one exists).
@@ -21,6 +21,8 @@ const CORE = [
   'js/core/textTab.js',
   'js/ui/editor.js',
   'js/ui/render.js',
+  'js/ui/notation.js',
+  'js/ui/glyphs.js',
   'js/ui/storage.js',
   'js/ui/syncPanel.js',
   'js/ui/icons.js',

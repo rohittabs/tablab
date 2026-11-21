@@ -50,6 +50,7 @@ export const SHORTCUTS = [
       [['M'], 'Metronome on or off'],
       [['C'], 'Count-in: off, 1 bar, 2 bars'],
       [['[', ']'], 'Practice speed slower or faster'],
+      [['Shift', 'N'], 'Show or hide standard notation above the tab'],
     ],
   },
   {

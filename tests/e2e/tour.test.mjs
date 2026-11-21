@@ -77,6 +77,11 @@ describe('pages', () => {
         assert.ok((await page.locator('[data-tab="loop"] .tl-loop').count()) >= 2);
         assert.equal(await page.locator('[data-tab="hero"] .tl-playhead').count(), 1);
       }
+      // Both pages show the notation view: a five line staff over the tab, in G major (one sharp).
+      const nota = page.locator('[data-tab="notation"] svg.tl-system').first();
+      assert.equal(await nota.locator('.tl-staff').count(), 5);
+      assert.equal(await page.locator('[data-tab="notation"]').count(), 1);
+      assert.equal(await page.locator('[data-tab]:not([data-tab="notation"]) .tl-staff').count(), 0);
       assert.deepEqual(page.errors, []);
       await page.context().close();
     }

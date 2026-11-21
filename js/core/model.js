@@ -3,7 +3,7 @@
 //
 // Song
 //   { format: 'tablab', version: 1, id, title, artist, instrument, tuning: [midi...],
-//     capo, tempo, timeSignature: [num, den], measures: [Measure], backingTrack, created, updated }
+//     capo, key (-7 flats .. 7 sharps), tempo, timeSignature: [num, den], measures: [Measure], backingTrack, created, updated }
 // Measure
 //   { beats: [Beat], timeSignature?: [num, den] (a change that starts here), section?: string }
 // Beat
@@ -48,6 +48,7 @@ export function createSong({ instrument = 'guitar', tuningId = 'standard', title
     instrument: inst.id,
     tuning,
     capo: 0,
+    key: 0,
     tempo,
     timeSignature: timeSignature.slice(),
     measures: [],
@@ -241,6 +242,7 @@ export function normalizeSong(raw) {
     instrument,
     tuning,
     capo: int(raw.capo, 0, 12, 0),
+    key: int(raw.key, -7, 7, 0),
     tempo: num(raw.tempo, MIN_TEMPO, MAX_TEMPO, 100),
     timeSignature: validTs(raw.timeSignature) ? raw.timeSignature.slice() : [4, 4],
     measures: [],

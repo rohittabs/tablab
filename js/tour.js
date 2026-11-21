@@ -68,6 +68,10 @@ const STRUM_C = strumBar('C', [3, 0, 0, 0], 'Strum along');
 const STRUM_AM = strumBar('Am', [0, 0, 0, 2]);
 
 // From the "Power Chord Riff" example.
+// A tune in G major for the notation view: the key signature takes care of the F sharps.
+const IN_G_1 = { beats: [beat(4, [note(0, 3)], { text: 'G' }), beat(8, [note(0, 2)]), beat(8, [note(0, 0)]), beat(4, [note(1, 3)]), beat(4, [note(1, 0)])] };
+const IN_G_2 = { beats: [beat(8, [note(2, 2)], { text: 'D' }), beat(8, [note(1, 0)]), beat(4, [note(1, 3)]), beat(2, [note(0, 2)])] };
+
 const E5 = [null, null, null, null, 2, 0];
 const RIFF = {
   section: 'Riff',
@@ -87,6 +91,7 @@ const RIFF = {
  * the rest fits on one line. wide: lay out at this width and scale down a little to fit the box,
  * when that is no more than 15% smaller. cursor: where the editing cursor sits. loop: loop the
  * last bar. play: move a playhead along the whole line ('all') or the looped bar ('loop').
+ * key and notation: the key signature, and standard notation above the tab.
  */
 const EXAMPLES = {
   hero: { tuning: GUITAR, tempo: 88, measures: [VARIATION_1, VARIATION_2], fit: true, play: 'all' },
@@ -95,6 +100,7 @@ const EXAMPLES = {
   ukulele: { instrument: 'ukulele', tuning: UKULELE, tempo: 92, measures: [STRUM_C, STRUM_AM], fit: true, wide: 460 },
   riff: { tuning: GUITAR, tempo: 112, measures: [RIFF], play: 'all' },
   loop: { tuning: GUITAR, tempo: 88, measures: [MELODY_1, MELODY_2], fit: true, loop: true, play: 'loop' },
+  notation: { tuning: GUITAR, tempo: 88, key: 1, measures: [IN_G_1, IN_G_2], fit: true, notation: true, play: 'all' },
 };
 
 function exampleSong(spec, bars) {
@@ -104,6 +110,7 @@ function exampleSong(spec, bars) {
     title: 'Example',
     instrument: spec.instrument || 'guitar',
     tuning: spec.tuning,
+    key: spec.key || 0,
     tempo: spec.tempo,
     timeSignature: [4, 4],
     measures: spec.measures.slice(0, bars),
@@ -128,7 +135,7 @@ function drawTab(el, force = false) {
   for (;;) {
     song = exampleSong(spec, bars);
     timeline = buildTimeline(song);
-    layout = layoutScore(song, timeline, layoutWidth, { justify: true });
+    layout = layoutScore(song, timeline, layoutWidth, { justify: true, notation: !!spec.notation });
     if (!fit || layout.systems.length === 1 || bars === 1) break;
     bars--;
   }
@@ -155,7 +162,7 @@ function drawTab(el, force = false) {
     const x0 = from.pos.left;
     const x1 = end.meas.x + end.meas.w - 3;
     const g = over(sys);
-    g.insertAdjacentHTML('beforeend', `<line class="tl-playhead" x1="0" y1="${sys.staffTop - 10}" x2="0" y2="${sys.staffBottom + 10}"/>`);
+    g.insertAdjacentHTML('beforeend', `<line class="tl-playhead" x1="0" y1="${spec.notation ? sys.contentTop : sys.staffTop - 10}" x2="0" y2="${sys.staffBottom + 10}"/>`);
     const line = g.lastElementChild;
     // Four beats a bar at the song tempo, so the playhead moves at the speed of the music.
     const seconds = ((spec.play === 'loop' ? 1 : song.measures.length) * 4 * 60) / song.tempo;
