@@ -1,0 +1,767 @@
+{
+ "format": "tablab",
+ "version": 1,
+ "id": "example-power-chord-riff",
+ "title": "Power Chord Riff",
+ "artist": "TabLab example",
+ "instrument": "guitar",
+ "tuning": [
+  64,
+  59,
+  55,
+  50,
+  45,
+  40
+ ],
+ "capo": 0,
+ "tempo": 112,
+ "timeSignature": [
+  4,
+  4
+ ],
+ "measures": [
+  {
+   "beats": [
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 4,
+       "fret": 2
+      },
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "text": "E5"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 4,
+       "fret": 0,
+       "dead": true
+      },
+      {
+       "string": 5,
+       "fret": 0,
+       "dead": true
+      }
+     ]
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 4,
+       "fret": 5
+      },
+      {
+       "string": 5,
+       "fret": 3
+      }
+     ],
+     "text": "G5"
+    }
+   ],
+   "section": "Riff"
+  },
+  {
+   "beats": [
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 3,
+       "fret": 2
+      },
+      {
+       "string": 4,
+       "fret": 0
+      }
+     ],
+     "text": "A5"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 3,
+       "fret": 0,
+       "dead": true
+      },
+      {
+       "string": 4,
+       "fret": 0,
+       "dead": true
+      }
+     ]
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 4,
+       "fret": 5
+      },
+      {
+       "string": 5,
+       "fret": 3
+      }
+     ],
+     "text": "G5"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 4,
+       "fret": 2
+      },
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "text": "E5"
+    }
+   ]
+  },
+  {
+   "beats": [
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 4,
+       "fret": 2
+      },
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "text": "E5"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 4,
+       "fret": 0,
+       "dead": true
+      },
+      {
+       "string": 5,
+       "fret": 0,
+       "dead": true
+      }
+     ]
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 4,
+       "fret": 5
+      },
+      {
+       "string": 5,
+       "fret": 3
+      }
+     ],
+     "text": "G5"
+    }
+   ]
+  },
+  {
+   "beats": [
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 4,
+       "fret": 5
+      },
+      {
+       "string": 5,
+       "fret": 3
+      }
+     ],
+     "text": "G5"
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 3,
+       "fret": 2
+      },
+      {
+       "string": 4,
+       "fret": 0
+      }
+     ],
+     "text": "A5"
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 3,
+       "fret": 4,
+       "vibrato": true
+      },
+      {
+       "string": 4,
+       "fret": 2
+      }
+     ],
+     "text": "B5"
+    }
+   ]
+  },
+  {
+   "beats": [
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 4,
+       "fret": 2
+      },
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "text": "E5"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 4,
+       "fret": 0,
+       "dead": true
+      },
+      {
+       "string": 5,
+       "fret": 0,
+       "dead": true
+      }
+     ]
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 4,
+       "fret": 5
+      },
+      {
+       "string": 5,
+       "fret": 3
+      }
+     ],
+     "text": "G5"
+    }
+   ],
+   "section": "Riff again"
+  },
+  {
+   "beats": [
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 3,
+       "fret": 2
+      },
+      {
+       "string": 4,
+       "fret": 0
+      }
+     ],
+     "text": "A5"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 3,
+       "fret": 0,
+       "dead": true
+      },
+      {
+       "string": 4,
+       "fret": 0,
+       "dead": true
+      }
+     ]
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 4,
+       "fret": 5
+      },
+      {
+       "string": 5,
+       "fret": 3
+      }
+     ],
+     "text": "G5"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 4,
+       "fret": 2
+      },
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "text": "E5"
+    }
+   ]
+  },
+  {
+   "beats": [
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "palmMute": true
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 4,
+       "fret": 2
+      },
+      {
+       "string": 5,
+       "fret": 0
+      }
+     ],
+     "text": "E5"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 4,
+       "fret": 0,
+       "dead": true
+      },
+      {
+       "string": 5,
+       "fret": 0,
+       "dead": true
+      }
+     ]
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 4,
+       "fret": 5
+      },
+      {
+       "string": 5,
+       "fret": 3
+      }
+     ],
+     "text": "G5"
+    }
+   ]
+  },
+  {
+   "beats": [
+    {
+     "duration": 1,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 4,
+       "fret": 2,
+       "vibrato": true
+      },
+      {
+       "string": 5,
+       "fret": 0,
+       "vibrato": true
+      }
+     ],
+     "text": "E5"
+    }
+   ],
+   "section": "End"
+  }
+ ],
+ "backingTrack": null,
+ "created": "2026-11-21T12:00:00.000Z",
+ "updated": "2026-11-21T12:00:00.000Z"
+}

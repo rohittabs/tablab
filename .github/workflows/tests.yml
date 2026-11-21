@@ -1,0 +1,25 @@
+# Runs the unit tests and the browser tests on every pull request and on main.
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Install Playwright
+        run: npm install --no-audit --no-fund && npx playwright install --with-deps chromium
+      - name: Unit tests
+        run: npm test
+      - name: Browser tests
+        run: npm run test:e2e

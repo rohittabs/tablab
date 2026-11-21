@@ -1,0 +1,167 @@
+// Measures how well a backing track and the song clock line up, at several practice speeds.
+// A click track goes through the real audio path; a tap in the audio graph timestamps every
+// click it hears, and each timestamp is compared with where the song clock says it should be.
+
+import { after, before, describe, it } from 'node:test';
+import assert from 'node:assert/strict';
+import { setup, wav } from './helpers.mjs';
+
+const SR = 44100;
+const FIRST = 1.0; // first click, and bar 1, in the recording
+const STEP = 0.5; // one click per beat at 120 BPM
+
+function pulses(seconds = 12) {
+  const out = new Float32Array(seconds * SR);
+  for (let t = FIRST; t < seconds - 0.2; t += STEP) {
+    const s0 = Math.round(t * SR);
+    for (let j = 0; j < 0.03 * SR; j++) out[s0 + j] = 0.9 * Math.exp(-j / (0.004 * SR)) * (j < 30 ? 1 : Math.sign(Math.sin(j * 0.7)));
+  }
+  return wav(out, SR);
+}
+
+let env;
+before(async () => {
+  env = await setup();
+});
+after(async () => {
+  await env.close();
+});
+
+async function prepare(speed) {
+  const page = await env.open();
+  await page.evaluate(
+    ({ FIRST }) => {
+      const measures = [];
+      for (let m = 0; m < 8; m++) measures.push({ beats: [0, 1, 2, 3].map(() => ({ duration: 4, dotted: false, triplet: false, notes: [{ string: 0, fret: 0 }] })) });
+      window.tablab.openSong({ format: 'tablab', version: 1, id: 'sync-test', title: 'Sync test', instrument: 'guitar', tuning: [64, 59, 55, 50, 45, 40], capo: 0, tempo: 120, timeSignature: [4, 4], measures, backingTrack: { fileName: 'pulses.wav', offset: FIRST, volume: 1, syncPoints: [] } });
+      window.tablab.prefs.countIn = 0;
+    },
+    { FIRST },
+  );
+  await page.click('#btn-track');
+  await page.setInputFiles('#file-audio', { name: 'pulses.wav', mimeType: 'audio/wav', buffer: pulses() });
+  await page.waitForFunction(() => window.tablab.engine.track && window.tablab.engine.track.peaks, null, { timeout: 10000 });
+  await page.evaluate(async (speed) => {
+    const e = window.tablab.engine;
+    const ctx = e.ctx;
+    const code = `class Tap extends AudioWorkletProcessor {
+      constructor() { super(); this.quiet = 1e9; }
+      process(inputs) {
+        const ch = inputs[0] && inputs[0][0];
+        if (ch) for (let i = 0; i < ch.length; i++) {
+          const v = Math.abs(ch[i]);
+          if (v > 0.15 && this.quiet > 4000) { this.port.postMessage((currentFrame + i) / sampleRate); this.quiet = 0; }
+          else if (v < 0.02) this.quiet++; else this.quiet = 0;
+        }
+        return true;
+      }
+    }
+    registerProcessor('tap', Tap);`;
+    await ctx.audioWorklet.addModule(URL.createObjectURL(new Blob([code], { type: 'text/javascript' })));
+    const tap = new AudioWorkletNode(ctx, 'tap');
+    const mute = ctx.createGain();
+    mute.gain.value = 0;
+    e.trackBus.connect(tap);
+    tap.connect(mute);
+    mute.connect(ctx.destination);
+    window.__onsets = [];
+    tap.port.onmessage = (m) => window.__onsets.push(m.data);
+    window.tablab.setSpeed(speed);
+  }, speed);
+  await page.focus('#score');
+  return page;
+}
+
+/** Song clock error at each click heard after `fromCtx` (seconds, + means the click came late). */
+function errors(page, fromCtx = 0) {
+  return page.evaluate(
+    ({ FIRST, STEP, fromCtx }) => {
+      const e = window.tablab.engine;
+      return window.__onsets
+        .filter((c) => c >= fromCtx)
+        .map((c) => {
+          const t = e.timeAt(c);
+          const k = Math.round((t - FIRST) / STEP);
+          return t - (FIRST + STEP * k);
+        });
+    },
+    { FIRST, STEP, fromCtx },
+  );
+}
+
+const ms = (x) => (x * 1000).toFixed(1);
+
+describe('backing track sync accuracy', () => {
+  for (const speed of [1, 0.75, 0.5, 1.25]) {
+    it(`clicks line up with the song clock at ${speed * 100}% speed`, async () => {
+      const page = await prepare(speed);
+      await page.keyboard.press('Space');
+      await page.waitForTimeout(5500);
+      const errs = await errors(page);
+      await page.keyboard.press('Space');
+      assert.ok(errs.length >= 4, 'clicks heard: ' + errs.length);
+      const mean = errs.reduce((a, b) => a + b, 0) / errs.length;
+      const worst = Math.max(...errs.map(Math.abs));
+      console.log(`  speed ${speed}: ${errs.length} clicks, mean ${ms(mean)} ms, worst ${ms(worst)} ms`);
+      assert.ok(Math.abs(mean) < 0.008, `average error ${ms(mean)} ms`);
+      assert.ok(worst < 0.025, `worst error ${ms(worst)} ms`);
+      assert.deepEqual(page.errors, []);
+      await page.context().close();
+    });
+  }
+
+  it('locks on when the count-in starts before the recording does', async () => {
+    const page = await prepare(1);
+    await page.evaluate(() => {
+      window.tablab.prefs.countIn = 1; // 2 s of count-in, so it starts 1 s before the file
+    });
+    await page.keyboard.press('Space');
+    await page.waitForTimeout(6000);
+    const errs = await errors(page);
+    await page.keyboard.press('Space');
+    assert.ok(errs.length >= 4, 'clicks heard: ' + errs.length);
+    const mean = errs.reduce((a, b) => a + b, 0) / errs.length;
+    const worst = Math.max(...errs.map(Math.abs));
+    console.log(`  late start: ${errs.length} clicks, mean ${ms(mean)} ms, worst ${ms(worst)} ms`);
+    assert.ok(worst < 0.012, `worst error ${ms(worst)} ms`);
+    await page.context().close();
+  });
+
+  it('stays in sync when a loop jumps back in the recording', async () => {
+    const page = await prepare(1);
+    await page.evaluate(() => {
+      window.tablab.editor.setCursor(1, 0); // loop bar 2: 3.0 s to 5.0 s in the file
+    });
+    await page.focus('#score');
+    await page.keyboard.press('l');
+    await page.keyboard.press('Space');
+    await page.waitForTimeout(6800);
+    const errs = await errors(page);
+    const loops = await page.evaluate(() => window.tablab.engine.anchors.length);
+    await page.keyboard.press('Space');
+    assert.ok(errs.length >= 8, 'clicks heard: ' + errs.length);
+    const mean = errs.reduce((a, b) => a + b, 0) / errs.length;
+    const worst = Math.max(...errs.map(Math.abs));
+    console.log(`  loop: ${errs.length} clicks, ${loops} clock anchors, mean ${ms(mean)} ms, worst ${ms(worst)} ms, all: ${errs.map(ms).join(' ')}`);
+    assert.ok(worst < 0.02, `worst error ${ms(worst)} ms`);
+    await page.context().close();
+  });
+
+  it('stays in sync when the speed changes while playing', async () => {
+    const page = await prepare(1);
+    await page.keyboard.press('Space');
+    await page.waitForTimeout(2000);
+    const changedAt = await page.evaluate(() => {
+      window.tablab.setSpeed(0.6);
+      return window.tablab.engine.ctx.currentTime;
+    });
+    await page.waitForTimeout(5000);
+    const errs = await errors(page, changedAt + 1.0);
+    await page.keyboard.press('Space');
+    assert.ok(errs.length >= 3, 'clicks heard after the change: ' + errs.length);
+    const mean = errs.reduce((a, b) => a + b, 0) / errs.length;
+    console.log(`  1 to 0.6: ${errs.length} clicks, mean ${ms(mean)} ms`);
+    assert.ok(Math.abs(mean) < 0.012, `average error ${ms(mean)} ms`);
+    await page.context().close();
+  });
+});

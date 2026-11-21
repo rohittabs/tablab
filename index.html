@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>TabLab: guitar and ukulele tab editor</title>
+  <meta name="description" content="TabLab is a free, simple tab editor and player for guitar and ukulele students. Write tabs with the keyboard, play them back, slow them down and practice along with your own backing track.">
+  <meta name="theme-color" content="#f6f6fb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1016" media="(prefers-color-scheme: dark)">
+  <meta property="og:title" content="TabLab">
+  <meta property="og:description" content="A simple guitar and ukulele tab editor and player for students.">
+  <meta property="og:image" content="assets/social-preview.png">
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>
+    // Apply the saved theme before first paint, so the page never flashes the wrong colours.
+    (function () {
+      var theme = null;
+      try { theme = JSON.parse(localStorage.getItem('tablab.prefs') || '{}').theme; } catch (e) {}
+      if (theme !== 'dark' && theme !== 'light') theme = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#score">Skip to the tab editor</a>
+
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="TabLab home">
+      <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="brand-liquid" x1="8" y1="34" x2="56" y2="60" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#7C5CFF"/>
+            <stop offset="1" stop-color="#17C3D6"/>
+          </linearGradient>
+          <clipPath id="brand-inside">
+            <path d="M27 9.5V25.5L12.4 50.2C10.6 53.3 12.6 56.3 16.2 56.3H47.8C51.4 56.3 53.4 53.3 51.6 50.2L37 25.5V9.5Z"/>
+          </clipPath>
+        </defs>
+        <g clip-path="url(#brand-inside)">
+          <path d="M0 35.5C6 33 11 33 16.5 35.5S27 38 32.5 35.5S43 33 48.5 35.5S59 38 64 35.5V64H0Z" fill="url(#brand-liquid)"/>
+          <g stroke="#fff" stroke-opacity=".85" stroke-width="1.5" stroke-linecap="round">
+            <line x1="0" y1="41.2" x2="64" y2="41.2"/><line x1="0" y1="45.6" x2="64" y2="45.6"/>
+            <line x1="0" y1="50" x2="64" y2="50"/><line x1="0" y1="54.4" x2="64" y2="54.4"/>
+          </g>
+          <g fill="#fff"><circle cx="25.2" cy="50" r="2.5"/><circle cx="31.8" cy="45.6" r="2.5"/><circle cx="38.4" cy="41.2" r="2.5"/></g>
+        </g>
+        <circle cx="30.6" cy="29" r="2.1" fill="#17C3D6"/><circle cx="34.4" cy="20.6" r="1.5" fill="#7C5CFF"/><circle cx="30.9" cy="14.2" r="1.1" fill="#17C3D6"/>
+        <path d="M27 9.5V25.5L12.4 50.2C10.6 53.3 12.6 56.3 16.2 56.3H47.8C51.4 56.3 53.4 53.3 51.6 50.2L37 25.5V9.5" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linejoin="round"/>
+        <rect x="23" y="5.6" width="18" height="4.6" rx="2.3" fill="currentColor"/>
+      </svg>
+      <span class="wordmark"><span>Tab</span><span class="wordmark-lab">Lab</span></span>
+    </a>
+
+    <div class="song-head">
+      <input id="song-title" class="song-title" type="text" maxlength="120" spellcheck="false" aria-label="Song title" placeholder="Song title">
+      <button id="btn-song" class="song-chip" type="button" title="Song settings: instrument, tuning, capo, tempo"></button>
+      <button id="btn-song-mini" class="tb icon-only song-mini" type="button" aria-label="Song settings" title="Song settings: instrument, tuning, capo, tempo"><span class="ic" data-icon="gear"></span></button>
+    </div>
+
+    <nav class="top-actions" aria-label="File and app">
+      <button id="btn-new" class="tb" type="button" title="New song"><span class="ic" data-icon="file"></span><span class="lbl">New</span></button>
+      <button id="btn-library" class="tb" type="button" title="Open a song (Ctrl+O)"><span class="ic" data-icon="folder"></span><span class="lbl">Open</span></button>
+      <button id="btn-save" class="tb" type="button" title="Download the song as a .tablab file (Ctrl+S)"><span class="ic" data-icon="save"></span><span class="lbl">Save</span></button>
+      <div class="menu-wrap">
+        <button id="btn-export" class="tb" type="button" aria-haspopup="menu" aria-expanded="false" title="Export or print"><span class="ic" data-icon="share"></span><span class="lbl">Export</span></button>
+        <div id="menu-export" class="menu" role="menu" hidden>
+          <button type="button" role="menuitem" data-export="txt">Text tab (.txt)</button>
+          <button type="button" role="menuitem" data-export="copy">Copy text tab</button>
+          <button type="button" role="menuitem" data-export="print">Print or save as PDF</button>
+          <button type="button" role="menuitem" data-export="tablab">TabLab file (.tablab)</button>
+        </div>
+      </div>
+      <span class="sep" aria-hidden="true"></span>
+      <button id="btn-theme" class="tb icon-only" type="button" aria-label="Switch to dark mode" title="Dark or light mode"><span class="ic" data-icon="moon"></span></button>
+      <button id="btn-help" class="tb icon-only" type="button" aria-label="Keyboard shortcuts and help" title="Shortcuts and help (?)"><span class="ic" data-icon="help"></span></button>
+    </nav>
+  </header>
+
+  <div class="toolbar" role="toolbar" aria-label="Note entry" id="toolbar">
+    <div class="group" aria-label="Note length">
+      <button class="tool dur" type="button" data-dur="1" title="Whole note">  <span class="ic" data-icon="whole"></span></button>
+      <button class="tool dur" type="button" data-dur="2" title="Half note">  <span class="ic" data-icon="half"></span></button>
+      <button class="tool dur" type="button" data-dur="4" title="Quarter note"><span class="ic" data-icon="quarter"></span></button>
+      <button class="tool dur" type="button" data-dur="8" title="Eighth note"> <span class="ic" data-icon="eighth"></span></button>
+      <button class="tool dur" type="button" data-dur="16" title="Sixteenth note"><span class="ic" data-icon="sixteenth"></span></button>
+      <button class="tool dur" type="button" data-dur="32" title="Thirty-second note"><span class="ic" data-icon="thirtysecond"></span></button>
+      <button class="tool" type="button" data-cmd="dotted" title="Dotted (.)"><span class="ic" data-icon="dot"></span></button>
+      <button class="tool txt" type="button" data-cmd="triplet" title="Triplet (T)">3</button>
+      <button class="tool" type="button" data-cmd="rest" title="Make rest (R)"><span class="ic" data-icon="rest"></span></button>
+    </div>
+    <div class="group" aria-label="Techniques">
+      <button class="tool txt" type="button" data-cmd="hammer" title="Hammer-on or pull-off to the next note (H)">h/p</button>
+      <button class="tool txt" type="button" data-cmd="slide" title="Slide to the next note (S)">/</button>
+      <button class="tool txt" type="button" data-cmd="bend" title="Bend: full, half, one and a half (B)">b</button>
+      <button class="tool txt" type="button" data-cmd="vibrato" title="Vibrato (V)">~</button>
+      <button class="tool txt" type="button" data-cmd="palmMute" title="Palm mute (P)">PM</button>
+      <button class="tool txt" type="button" data-cmd="dead" title="Dead note (X)">x</button>
+      <button class="tool txt" type="button" data-cmd="ghost" title="Ghost note (G)">( )</button>
+      <button class="tool txt" type="button" data-cmd="harmonic" title="Natural harmonic (N)">&lt;&gt;</button>
+    </div>
+    <div class="group" aria-label="Strums and labels">
+      <button class="tool" type="button" data-cmd="strumDown" title="Down strum (D)"><span class="ic" data-icon="strumDown"></span></button>
+      <button class="tool" type="button" data-cmd="strumUp" title="Up strum (U)"><span class="ic" data-icon="strumUp"></span></button>
+      <button class="tool" type="button" data-cmd="text" title="Chord name or text above the beat (Shift+T)"><span class="ic" data-icon="text"></span></button>
+      <button class="tool" type="button" data-cmd="section" title="Section label for this bar, like Verse (Shift+M)"><span class="ic" data-icon="flag"></span></button>
+    </div>
+    <div class="group" aria-label="Bars">
+      <button class="tool" type="button" data-cmd="addBar" title="Insert a bar after this one (Enter)"><span class="ic" data-icon="plusBar"></span></button>
+      <button class="tool" type="button" data-cmd="deleteBar" title="Delete this bar (Ctrl+Shift+Delete)"><span class="ic" data-icon="minusBar"></span></button>
+      <button class="tool txt ts-btn" type="button" data-cmd="timeSig" title="Time signature from this bar on">4/4</button>
+    </div>
+    <div class="group" aria-label="Undo">
+      <button class="tool" type="button" data-cmd="undo" title="Undo (Ctrl+Z)"><span class="ic" data-icon="undo"></span></button>
+      <button class="tool" type="button" data-cmd="redo" title="Redo (Ctrl+Y)"><span class="ic" data-icon="redo"></span></button>
+      <button class="tool keypad-toggle" type="button" data-cmd="keypad" title="On-screen number pad"><span class="ic" data-icon="keyboard"></span></button>
+    </div>
+    <div class="status" id="status" aria-live="polite"></div>
+  </div>
+
+  <main id="score" class="score" tabindex="0" aria-label="Tab editor. Arrow keys move, number keys enter frets, Space plays. Press question mark for all shortcuts." aria-describedby="status">
+    <div class="paper">
+      <div class="paper-head">
+        <h1 id="print-title" class="print-title"></h1>
+        <p id="print-sub" class="print-sub"></p>
+      </div>
+      <div id="systems" class="systems"></div>
+      <div id="countin" class="countin" aria-hidden="true"></div>
+    </div>
+  </main>
+
+  <section id="sync-panel" class="sync-panel" aria-label="Backing track" hidden>
+    <div class="sync-row">
+      <button id="btn-load-audio" class="btn primary" type="button"><span class="ic" data-icon="music"></span>Load audio file</button>
+      <span id="track-name" class="track-name">No backing track yet</span>
+      <button id="btn-remove-audio" class="btn ghost icon-only" type="button" aria-label="Remove backing track" title="Remove backing track" hidden><span class="ic" data-icon="trash"></span></button>
+      <span class="spacer"></span>
+      <button id="btn-detect" class="btn" type="button" title="Find the tempo and where bar 1 starts" disabled><span class="ic" data-icon="sparkle"></span>Auto sync</button>
+      <button id="btn-tap" class="btn" type="button" title="Tap along with the beat to set the tempo"><span class="ic" data-icon="tap"></span>Tap tempo</button>
+      <button id="btn-set-start" class="btn" type="button" title="While the track plays, press on the first beat of bar 1" disabled>Bar 1 starts now</button>
+    </div>
+    <div class="wave-wrap">
+      <canvas id="wave" class="wave" tabindex="0" aria-label="Waveform with bar lines. Drag a bar line onto the matching beat. Double click a pinned bar to unpin it."></canvas>
+      <div class="wave-tools">
+        <button id="btn-zoom-in" class="btn ghost icon-only" type="button" aria-label="Zoom in"><span class="ic" data-icon="zoomIn"></span></button>
+        <button id="btn-zoom-out" class="btn ghost icon-only" type="button" aria-label="Zoom out"><span class="ic" data-icon="zoomOut"></span></button>
+        <button id="btn-zoom-fit" class="btn ghost icon-only" type="button" aria-label="Show the whole track"><span class="ic" data-icon="fit"></span></button>
+      </div>
+    </div>
+    <div class="sync-row small">
+      <span class="grp">
+        <label class="field">Bar 1 starts at
+          <input id="in-offset" type="number" step="0.01" min="-600" value="0" inputmode="decimal"> s
+        </label>
+        <button class="btn ghost" type="button" data-nudge="-0.01" title="10 ms earlier">-10 ms</button>
+        <button class="btn ghost" type="button" data-nudge="0.01" title="10 ms later">+10 ms</button>
+      </span>
+      <span class="grp">
+        <label class="field">Tempo
+          <input id="in-sync-tempo" type="number" step="0.01" min="20" max="320" inputmode="decimal"> BPM
+        </label>
+        <button class="btn ghost" type="button" id="btn-half" title="Half the tempo">÷2</button>
+        <button class="btn ghost" type="button" id="btn-double" title="Double the tempo">×2</button>
+      </span>
+      <span id="pins" class="pins"></span>
+      <span class="spacer"></span>
+      <span class="grp">
+        <label class="field"><input id="chk-tab-sound" type="checkbox" checked> Tab sound</label>
+        <label class="field">Track volume <input id="vol-track" type="range" min="0" max="1.2" step="0.01" value="0.9"></label>
+      </span>
+    </div>
+    <p class="hint" id="sync-hint">Load an MP3, M4A, WAV or OGG file. Then press Auto sync, or set the tempo and drag the bar 1 line onto the first beat. If the music drifts later on, drag that bar's line onto its beat to pin it.</p>
+  </section>
+
+  <footer class="player" aria-label="Player">
+    <div class="pgroup">
+      <button id="btn-rewind" class="pbtn" type="button" aria-label="Back to the start" title="Back to the start (Ctrl+Home)"><span class="ic" data-icon="rewind"></span></button>
+      <button id="btn-play" class="pbtn play" type="button" aria-label="Play" title="Play or pause (Space)"><span class="ic" data-icon="play"></span></button>
+      <button id="btn-loop" class="pbtn toggle" type="button" aria-pressed="false" title="Loop the selection or the current bar (L)"><span class="ic" data-icon="loop"></span></button>
+    </div>
+    <div class="pgroup">
+      <button id="btn-countin" class="pbtn toggle wide" type="button" aria-pressed="false" title="Count-in before playing (C)"><span class="ic" data-icon="countin"></span><span id="countin-label">Off</span></button>
+      <button id="btn-metronome" class="pbtn toggle" type="button" aria-pressed="false" title="Metronome (M)"><span class="ic" data-icon="metronome"></span></button>
+    </div>
+    <div class="pgroup tempo">
+      <label class="field" title="Song tempo in quarter notes per minute">Tempo
+        <input id="in-tempo" type="number" min="20" max="320" step="1" inputmode="numeric"> BPM
+      </label>
+      <label class="field speed" title="Practice speed: slows or speeds up the tab and the backing track without changing the pitch ([ and ])">Speed
+        <input id="in-speed" type="range" min="0.25" max="1.5" step="0.05" value="1">
+        <output id="out-speed">100%</output>
+      </label>
+    </div>
+    <div class="pgroup">
+      <button id="btn-track" class="pbtn toggle wide" type="button" aria-pressed="false" title="Backing track"><span class="ic" data-icon="wave"></span><span class="lbl">Backing track</span></button>
+      <div class="menu-wrap">
+        <button id="btn-mixer" class="pbtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Volumes" title="Volumes"><span class="ic" data-icon="volume"></span></button>
+        <div id="mixer" class="menu mixer" hidden>
+          <label>Tab sound <input id="vol-synth" type="range" min="0" max="1.2" step="0.01" value="0.8"></label>
+          <label>Metronome <input id="vol-click" type="range" min="0" max="1.2" step="0.01" value="0.7"></label>
+          <label>Backing track <input id="vol-track2" type="range" min="0" max="1.2" step="0.01" value="0.9"></label>
+          <label class="check"><input id="chk-preview" type="checkbox" checked> Play notes while typing</label>
+        </div>
+      </div>
+    </div>
+    <div class="position" id="position" aria-live="off">Bar 1 · Beat 1</div>
+  </footer>
+
+  <div id="keypad" class="keypad" hidden aria-label="Number pad">
+    <div class="keys">
+      <button type="button" data-key="1">1</button><button type="button" data-key="2">2</button><button type="button" data-key="3">3</button>
+      <button type="button" data-key="ArrowUp" aria-label="String up">↑</button>
+      <button type="button" data-key="4">4</button><button type="button" data-key="5">5</button><button type="button" data-key="6">6</button>
+      <button type="button" data-key="ArrowDown" aria-label="String down">↓</button>
+      <button type="button" data-key="7">7</button><button type="button" data-key="8">8</button><button type="button" data-key="9">9</button>
+      <button type="button" data-key="Backspace" aria-label="Delete">⌫</button>
+      <button type="button" data-key="ArrowLeft" aria-label="Previous beat">←</button><button type="button" data-key="0">0</button><button type="button" data-key="ArrowRight" aria-label="Next beat">→</button>
+      <button type="button" data-key=" " aria-label="Play or pause">▶</button>
+    </div>
+  </div>
+
+  <dialog id="dlg-help" class="dialog wide" aria-labelledby="help-title">
+    <form method="dialog">
+      <header><h2 id="help-title">Keyboard shortcuts</h2><button class="btn ghost icon-only" value="close" aria-label="Close" formnovalidate><span class="ic" data-icon="close"></span></button></header>
+      <div class="help-body" id="help-body"></div>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-song" class="dialog" aria-labelledby="song-title-h">
+    <form method="dialog" id="form-song">
+      <header><h2 id="song-title-h">Song settings</h2><button class="btn ghost icon-only" value="cancel" aria-label="Close" formnovalidate><span class="ic" data-icon="close"></span></button></header>
+      <div class="form-grid">
+        <label>Title <input name="title" type="text" maxlength="120" required></label>
+        <label>Artist or composer <input name="artist" type="text" maxlength="120"></label>
+        <fieldset class="inst">
+          <legend>Instrument</legend>
+          <label class="seg"><input type="radio" name="instrument" value="guitar"><span>Guitar</span></label>
+          <label class="seg"><input type="radio" name="instrument" value="ukulele"><span>Ukulele</span></label>
+        </fieldset>
+        <label>Tuning <select name="tuning"></select></label>
+        <label>Capo <select name="capo"></select></label>
+        <label>Tempo (BPM) <input name="tempo" type="number" min="20" max="320" step="1" required></label>
+        <label>Time signature
+          <span class="ts-pick"><select name="tsNum"></select> / <select name="tsDen"></select></span>
+        </label>
+        <p class="warn" id="song-warn" hidden></p>
+      </div>
+      <footer>
+        <button class="btn ghost" value="cancel" type="submit" formnovalidate>Cancel</button>
+        <button class="btn primary" value="ok" type="submit" id="song-ok">Save</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-library" class="dialog wide" aria-labelledby="lib-title">
+    <form method="dialog">
+      <header><h2 id="lib-title">Open a song</h2><button class="btn ghost icon-only" value="close" aria-label="Close" formnovalidate><span class="ic" data-icon="close"></span></button></header>
+      <div class="lib-actions">
+        <button class="btn primary" type="button" id="btn-open-file"><span class="ic" data-icon="folder"></span>Open a .tablab file</button>
+      </div>
+      <h3>Examples</h3>
+      <ul class="lib-list" id="lib-examples"></ul>
+      <h3>Saved in this browser</h3>
+      <ul class="lib-list" id="lib-songs"></ul>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-ask" class="dialog small" aria-labelledby="ask-title">
+    <form method="dialog" id="form-ask">
+      <header><h2 id="ask-title">Text</h2></header>
+      <label id="ask-label" class="stack"><span id="ask-text"></span><input id="ask-input" type="text" maxlength="40" autocomplete="off"></label>
+      <footer>
+        <button class="btn ghost" value="cancel" type="submit" formnovalidate>Cancel</button>
+        <button class="btn primary" value="ok" type="submit">OK</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-ts" class="dialog small" aria-labelledby="ts-title">
+    <form method="dialog" id="form-ts">
+      <header><h2 id="ts-title">Time signature</h2></header>
+      <p class="muted">Applies from this bar until the next change.</p>
+      <div class="ts-pick big"><select name="num" aria-label="Beats per bar"></select><span>/</span><select name="den" aria-label="Beat unit"></select></div>
+      <footer>
+        <button class="btn ghost" value="cancel" type="submit" formnovalidate>Cancel</button>
+        <button class="btn primary" value="ok" type="submit">Apply</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <input type="file" id="file-song" accept=".tablab,.json,application/json" hidden>
+  <input type="file" id="file-audio" accept="audio/*,.mp3,.m4a,.aac,.wav,.ogg,.oga,.opus,.flac,.webm" hidden>
+  <noscript><p class="noscript">TabLab needs JavaScript to run.</p></noscript>
+</body>
+</html>

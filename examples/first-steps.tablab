@@ -1,0 +1,371 @@
+{
+ "format": "tablab",
+ "version": 1,
+ "id": "example-first-steps",
+ "title": "First Steps",
+ "artist": "TabLab example",
+ "instrument": "guitar",
+ "tuning": [
+  64,
+  59,
+  55,
+  50,
+  45,
+  40
+ ],
+ "capo": 0,
+ "tempo": 88,
+ "timeSignature": [
+  4,
+  4
+ ],
+ "measures": [
+  {
+   "beats": [
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 1,
+       "fret": 1
+      }
+     ],
+     "text": "C"
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 1,
+       "fret": 3
+      }
+     ]
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      }
+     ]
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 3
+      }
+     ]
+    }
+   ],
+   "section": "Melody"
+  },
+  {
+   "beats": [
+    {
+     "duration": 2,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 5
+      }
+     ],
+     "text": "Am"
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 3
+      }
+     ]
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "beats": [
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 1
+      }
+     ],
+     "text": "F"
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      }
+     ]
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 1,
+       "fret": 3
+      }
+     ]
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 1,
+       "fret": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "beats": [
+    {
+     "duration": 2,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 1,
+       "fret": 3,
+       "vibrato": true
+      }
+     ],
+     "text": "G"
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": []
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 2,
+       "fret": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "beats": [
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 1,
+       "fret": 1,
+       "hammer": true
+      }
+     ],
+     "text": "C"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 1,
+       "fret": 3
+      }
+     ]
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      }
+     ]
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 3,
+       "slide": true
+      }
+     ]
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 5
+      }
+     ]
+    }
+   ],
+   "section": "Variation"
+  },
+  {
+   "beats": [
+    {
+     "duration": 2,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 1,
+       "fret": 8,
+       "bend": 2
+      }
+     ],
+     "text": "Em"
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      }
+     ]
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 1,
+       "fret": 3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "beats": [
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 1,
+       "fret": 1
+      }
+     ],
+     "text": "F"
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      }
+     ]
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 1,
+       "fret": 3
+      }
+     ],
+     "text": "G"
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 1,
+       "fret": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "beats": [
+    {
+     "duration": 1,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 1,
+       "fret": 1,
+       "vibrato": true
+      },
+      {
+       "string": 2,
+       "fret": 0
+      }
+     ],
+     "text": "C"
+    }
+   ]
+  }
+ ],
+ "backingTrack": null,
+ "created": "2026-11-21T12:00:00.000Z",
+ "updated": "2026-11-21T12:00:00.000Z"
+}

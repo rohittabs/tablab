@@ -1,0 +1,1249 @@
+{
+ "format": "tablab",
+ "version": 1,
+ "id": "example-campfire-strum",
+ "title": "Campfire Strum",
+ "artist": "TabLab example",
+ "instrument": "ukulele",
+ "tuning": [
+  69,
+  64,
+  60,
+  67
+ ],
+ "capo": 0,
+ "tempo": 92,
+ "timeSignature": [
+  4,
+  4
+ ],
+ "measures": [
+  {
+   "beats": [
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 3
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "down",
+     "text": "C"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 3
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "down"
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 3
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "up"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 3
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "up"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 3
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "down"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 3
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "up"
+    }
+   ],
+   "section": "Strum along"
+  },
+  {
+   "beats": [
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "down",
+     "text": "Am"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "down"
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "up"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "up"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "down"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "up"
+    }
+   ]
+  },
+  {
+   "beats": [
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 1
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "down",
+     "text": "F"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 1
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "down"
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 1
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "up"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 1
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "up"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 1
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "down"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 1
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "up"
+    }
+   ]
+  },
+  {
+   "beats": [
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 2
+      },
+      {
+       "string": 1,
+       "fret": 3
+      },
+      {
+       "string": 2,
+       "fret": 2
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "down",
+     "text": "G"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 2
+      },
+      {
+       "string": 1,
+       "fret": 3
+      },
+      {
+       "string": 2,
+       "fret": 2
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "down"
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 2
+      },
+      {
+       "string": 1,
+       "fret": 3
+      },
+      {
+       "string": 2,
+       "fret": 2
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "up"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 2
+      },
+      {
+       "string": 1,
+       "fret": 3
+      },
+      {
+       "string": 2,
+       "fret": 2
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "up"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 2
+      },
+      {
+       "string": 1,
+       "fret": 3
+      },
+      {
+       "string": 2,
+       "fret": 2
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "down"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 2
+      },
+      {
+       "string": 1,
+       "fret": 3
+      },
+      {
+       "string": 2,
+       "fret": 2
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "up"
+    }
+   ]
+  },
+  {
+   "beats": [
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 3
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "down",
+     "text": "C"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 3
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "down"
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 3
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "up"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 3
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "up"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 3
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "down"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 3
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "up"
+    }
+   ],
+   "section": "Again"
+  },
+  {
+   "beats": [
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "down",
+     "text": "Am"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "down"
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "up"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "up"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "down"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "up"
+    }
+   ]
+  },
+  {
+   "beats": [
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 1
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "down",
+     "text": "F"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 1
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "down"
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 1
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "up"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 1
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "up"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 1
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "down"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 0
+      },
+      {
+       "string": 1,
+       "fret": 1
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 2
+      }
+     ],
+     "strum": "up"
+    }
+   ]
+  },
+  {
+   "beats": [
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 2
+      },
+      {
+       "string": 1,
+       "fret": 3
+      },
+      {
+       "string": 2,
+       "fret": 2
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "down",
+     "text": "G"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 2
+      },
+      {
+       "string": 1,
+       "fret": 3
+      },
+      {
+       "string": 2,
+       "fret": 2
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "down"
+    },
+    {
+     "duration": 4,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 2
+      },
+      {
+       "string": 1,
+       "fret": 3
+      },
+      {
+       "string": 2,
+       "fret": 2
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "up"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 2
+      },
+      {
+       "string": 1,
+       "fret": 3
+      },
+      {
+       "string": 2,
+       "fret": 2
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "up"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 2
+      },
+      {
+       "string": 1,
+       "fret": 3
+      },
+      {
+       "string": 2,
+       "fret": 2
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "down"
+    },
+    {
+     "duration": 8,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 2
+      },
+      {
+       "string": 1,
+       "fret": 3
+      },
+      {
+       "string": 2,
+       "fret": 2
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "up"
+    }
+   ]
+  },
+  {
+   "beats": [
+    {
+     "duration": 1,
+     "dotted": false,
+     "triplet": false,
+     "notes": [
+      {
+       "string": 0,
+       "fret": 3
+      },
+      {
+       "string": 1,
+       "fret": 0
+      },
+      {
+       "string": 2,
+       "fret": 0
+      },
+      {
+       "string": 3,
+       "fret": 0
+      }
+     ],
+     "strum": "down",
+     "text": "C"
+    }
+   ],
+   "section": "End"
+  }
+ ],
+ "backingTrack": null,
+ "created": "2026-11-21T12:00:00.000Z",
+ "updated": "2026-11-21T12:00:00.000Z"
+}

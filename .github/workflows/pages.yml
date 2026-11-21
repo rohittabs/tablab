@@ -1,0 +1,66 @@
+# Publishes TabLab to GitHub Pages whenever main changes.
+# One-time setup: Settings > Pages > Build and deployment > Source: GitHub Actions.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      pages-on: ${{ steps.pages.outputs.on }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Unit tests
+        run: npm test
+      - name: Collect the site files
+        run: |
+          mkdir _site
+          cp -r index.html manifest.webmanifest sw.js css js assets examples _site/
+          touch _site/.nojekyll
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+      # Until Pages is switched on (Source: GitHub Actions), skip the deploy with a note
+      # instead of failing. Any other answer goes ahead, so real errors still show.
+      - name: Check that GitHub Pages is switched on
+        id: pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          code=$(curl -sS -o pages.json -w '%{http_code}' \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/pages" || true)
+          if [ "$code" = "404" ] || { [ "$code" = "200" ] && [ "$(jq -r .build_type pages.json)" != "workflow" ]; }; then
+            echo "on=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=The website is not switched on yet::In Settings, Pages, set Source to GitHub Actions, then run this workflow again from the Actions tab."
+          else
+            echo "on=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  deploy:
+    needs: build
+    if: needs.build.outputs.pages-on == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
