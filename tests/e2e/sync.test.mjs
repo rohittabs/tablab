@@ -9,6 +9,9 @@ import { setup, wav } from './helpers.mjs';
 const SR = 44100;
 const FIRST = 1.0; // first click, and bar 1, in the recording
 const STEP = 0.5; // one click per beat at 120 BPM
+// The audio graph's sample rate. Sound cards differ (44100 and 48000 are both common), so
+// run this file with TEST_SAMPLE_RATE=48000 too. 0 keeps the browser's own choice.
+const GRAPH_RATE = Number(process.env.TEST_SAMPLE_RATE || 0);
 
 function pulses(seconds = 12) {
   const out = new Float32Array(seconds * SR);
@@ -28,7 +31,7 @@ after(async () => {
 });
 
 async function prepare(speed) {
-  const page = await env.open();
+  const page = await env.open({ sampleRate: GRAPH_RATE });
   await page.evaluate(
     ({ FIRST }) => {
       const measures = [];
@@ -44,14 +47,17 @@ async function prepare(speed) {
   await page.evaluate(async (speed) => {
     const e = window.tablab.engine;
     const ctx = e.ctx;
+    // A click starts where the signal first goes over 0.15 after at least 0.2 s below it.
+    // Low noise between clicks (from resampling or time stretching) cannot hide a click.
     const code = `class Tap extends AudioWorkletProcessor {
-      constructor() { super(); this.quiet = 1e9; }
+      constructor() { super(); this.since = 1e9; this.gap = Math.round(0.2 * sampleRate); }
       process(inputs) {
         const ch = inputs[0] && inputs[0][0];
         if (ch) for (let i = 0; i < ch.length; i++) {
-          const v = Math.abs(ch[i]);
-          if (v > 0.15 && this.quiet > 4000) { this.port.postMessage((currentFrame + i) / sampleRate); this.quiet = 0; }
-          else if (v < 0.02) this.quiet++; else this.quiet = 0;
+          if (Math.abs(ch[i]) > 0.15) {
+            if (this.since > this.gap) this.port.postMessage((currentFrame + i) / sampleRate);
+            this.since = 0;
+          } else this.since++;
         }
         return true;
       }
@@ -95,14 +101,18 @@ describe('backing track sync accuracy', () => {
   for (const speed of [1, 0.75, 0.5, 1.25]) {
     it(`clicks line up with the song clock at ${speed * 100}% speed`, async () => {
       const page = await prepare(speed);
+      const start = await page.evaluate(() => window.tablab.engine.ctx.currentTime);
       await page.keyboard.press('Space');
       await page.waitForTimeout(5500);
-      const errs = await errors(page);
+      // The first quarter second is left out: the browser's time stretcher fades the sound in
+      // there, which can move the very first click's attack by up to 20 ms. That fade is part
+      // of the browser, not of TabLab's timing (the late start test below covers starting).
+      const errs = await errors(page, start + 0.25);
       await page.keyboard.press('Space');
       assert.ok(errs.length >= 4, 'clicks heard: ' + errs.length);
       const mean = errs.reduce((a, b) => a + b, 0) / errs.length;
       const worst = Math.max(...errs.map(Math.abs));
-      console.log(`  speed ${speed}: ${errs.length} clicks, mean ${ms(mean)} ms, worst ${ms(worst)} ms`);
+      console.log(`  speed ${speed}: ${errs.length} clicks, mean ${ms(mean)} ms, worst ${ms(worst)} ms, all: ${errs.map(ms).join(' ')}`);
       assert.ok(Math.abs(mean) < 0.008, `average error ${ms(mean)} ms`);
       assert.ok(worst < 0.025, `worst error ${ms(worst)} ms`);
       assert.deepEqual(page.errors, []);

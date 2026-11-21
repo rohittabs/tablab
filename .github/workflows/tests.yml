@@ -23,3 +23,7 @@ jobs:
         run: npm test
       - name: Browser tests
         run: npm run test:e2e
+      - name: Backing track timing with a 48 kHz sound card
+        run: node --test tests/e2e/sync.test.mjs
+        env:
+          TEST_SAMPLE_RATE: 48000

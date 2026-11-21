@@ -19,8 +19,19 @@ export async function setup() {
       await new Promise((r) => server.close(r));
     },
     /** A fresh page (new storage) with TabLab loaded. Errors are collected in page.errors. */
-    async open({ query = '?nosw', theme = 'light', viewport = { width: 1280, height: 800 }, context: ctxOpts = {}, clear = true } = {}) {
+    async open({ query = '?nosw', theme = 'light', viewport = { width: 1280, height: 800 }, context: ctxOpts = {}, clear = true, sampleRate = 0 } = {}) {
       const context = await browser.newContext({ viewport, colorScheme: theme, acceptDownloads: true, ...ctxOpts });
+      if (sampleRate) {
+        // Run the audio graph at a chosen rate, as on a sound card that prefers it.
+        await context.addInitScript((rate) => {
+          const Base = window.AudioContext;
+          window.AudioContext = class extends Base {
+            constructor(options = {}) {
+              super({ ...options, sampleRate: rate });
+            }
+          };
+        }, sampleRate);
+      }
       const page = await context.newPage();
       page.errors = [];
       page.on('console', (m) => {
